@@ -123,26 +123,6 @@
 <body>
 
 
-    <button id="printPdf">Imprimir PDF</button>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@1.5.3/dist/jspdf.min.js"></script>
-    <script>
-        const printPdf = () => {
-            const pdf = new jsPDF();
-            pdf.addHTML(document.body, () => {
-                pdf.save("pagina.pdf");
-            });
-        };
-
-        const btnPrintPdf = document.getElementById("printPdf");
-        if (btnPrintPdf) {
-            btnPrintPdf.addEventListener("click", printPdf);
-        } else {
-            console.error("Botão Imprimir PDF não encontrado");
-        }
-    </script>
 
     <script>
         function previewImage() {
@@ -252,7 +232,7 @@
             Atenciosamente,
             <br>
             [Nome da Empresa]
-            <button id="printPdf">Imprimir PDF</button>
+           
         </div>
     </div>
 </body>
