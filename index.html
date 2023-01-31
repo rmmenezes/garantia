@@ -68,11 +68,27 @@
             margin-top: 40px;
         }
 
+        ::placeholder {
+            /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: red;
+            opacity: 1;
+            /* Firefox */
+        }
+
+        :-ms-input-placeholder {
+            /* Internet Explorer 10-11 */
+            color: red;
+        }
+
+        ::-ms-input-placeholder {
+            /* Microsoft Edge */
+            color: red;
+        }
+
         .text-field {
             display: block;
             font-size: 14px;
             color: #696969;
-
             text-align: justify;
             background-color: transparent;
             border: 0px;
@@ -86,10 +102,48 @@
             padding: 10px;
             width: 300px;
         }
+
+        span {
+            outline: none;
+            display: inline-block;
+        }
+
+        span:empty:before {
+            content: attr(placeholder);
+            color: rgb(255, 0, 0);
+        }
+
+        input:empty:before {
+            content: attr(placeholder);
+            color: rgb(255, 0, 0);
+        }
     </style>
 </head>
 
 <body>
+
+
+    <button id="printPdf">Imprimir PDF</button>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@1.5.3/dist/jspdf.min.js"></script>
+    <script>
+        const printPdf = () => {
+            const pdf = new jsPDF();
+            pdf.addHTML(document.body, () => {
+                pdf.save("pagina.pdf");
+            });
+        };
+
+        const btnPrintPdf = document.getElementById("printPdf");
+        if (btnPrintPdf) {
+            btnPrintPdf.addEventListener("click", printPdf);
+        } else {
+            console.error("Botão Imprimir PDF não encontrado");
+        }
+    </script>
+
     <script>
         function previewImage() {
             var preview = document.getElementById('preview');
@@ -107,23 +161,73 @@
             }
         };
     </script>
+    <script>
+        function applyMask() {
+            let cpf = document.getElementById("cpf").value;
+            cpf = cpf.replace(/\D/g, "");
+            cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+            cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+            cpf = cpf.replace(/(\d{3})(\d)/, "$1-$2");
+            document.getElementById("cpf").value = cpf;
+        }
+
+        function validateCPF() {
+            let cpf = document.getElementById("cpf").value;
+            cpf = cpf.replace(/[^\d]+/g, "");
+            if (cpf === "") return false;
+
+            if (cpf.length !== 11 || cpf === "00000000000" || cpf === "11111111111" || cpf === "22222222222" || cpf === "33333333333" || cpf === "44444444444" || cpf === "55555555555" || cpf === "66666666666" || cpf === "77777777777" || cpf === "88888888888" || cpf === "99999999999") {
+                alert("CPF inválido");
+                document.getElementById("cpf").value = "";
+                return false;
+            }
+
+            let sum = 0;
+            let rest;
+            for (let i = 1; i <= 9; i++) sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+            rest = (sum * 10) % 11;
+
+            if (rest === 10 || rest === 11) rest = 0;
+            if (rest !== parseInt(cpf.substring(9, 10))) {
+                alert("CPF inválido");
+                document.getElementById("cpf").value = "";
+                return false;
+            }
+
+            sum = 0;
+            for (let i = 1; i <= 10; i++) sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+            rest = (sum * 10) % 11;
+
+            if (rest === 10 || rest === 11) rest = 0;
+            if (rest !== parseInt(cpf.substring(10, 11))) {
+                alert("CPF inválido");
+                document.getElementById("cpf").value = "";
+                return false;
+            }
+            return true;
+        }
+    </script>
 
     <div class="certificate">
         <div class="title">Certificado de Garantia</div>
 
         <div class="avatar" onclick="document.getElementById('fileInput').click()">
-            <img id="preview" class="avatar" src="" alt="Avatar">
+            <img id="preview" class="avatar" src="">
         </div>
         <input type="file" id="fileInput" style="display:none" onchange="previewImage()">
 
-        <input class="field-input-joia" type="date" min="2000-01-01" max="2050-12-31" class="w-100">
+        <input class="field-input-joia" type="date" min="2023-01-01" max="2060-12-31" style="color: red">
         <br><br>
         <textarea class="field-input-joia" placeholder="Descrição da Joia"></textarea>
         <br><br>
 
         <div class="text">
             Ola
-            <input style="display:inline;" type="text" class="text-field" placeholder="Cliente">
+            <span placeholder="Nome Cliente" class="input text-field" style="display:inline;" type="input"
+                aria-placeholder="nome" contenteditable></span>,
+
+            CPF: <input class="input text-field" style=" display:inline; user-select: all; cursor: pointer;" type="text"
+                id="cpf" onkeyup="applyMask()" onblur="validateCPF()" maxlength="14" placeholder="000-000-000.00">,
             <br><br>
             Obrigado por escolher nossas semijoias. Estamos agradecidos pelo seu apoio à nossa empresa. Esperamos que
             você tenha uma ótima experiência com sua nova jóia.
@@ -148,6 +252,7 @@
             Atenciosamente,
             <br>
             [Nome da Empresa]
+            <button id="printPdf">Imprimir PDF</button>
         </div>
     </div>
 </body>
