@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFF5EE;
+        }
+
+        .certificate {
+            max-width: 1000px;
+            margin: 50px auto;
+            background-color: #FFB6C1;
+            border: 5px solid #FF69B4;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 30px;
+            color: #FF69B4;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto;
+            margin-bottom: 10px;
+            background-image: url("https://via.placeholder.com/150x150");
+            background-size: cover;
+        }
+
+        .field {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .field-label {
+            font-size: 14px;
+            color: #696969;
+            width: 200px;
+            text-align: right;
+            margin-right: 20px;
+        }
+
+        .field-input {
+            font-size: 14px;
+            color: #696969;
+            border: 1px solid #696969;
+            padding: 10px;
+            width: 300px;
+        }
+
+        .text {
+            font-size: 14px;
+            color: #696969;
+            margin-bottom: 40px;
+            text-align: justify;
+        }
+
+        .note {
+            font-size: 14px;
+            color: #696969;
+            margin-top: 40px;
+        }
+
+        .text-field {
+            display: block;
+            font-size: 14px;
+            color: #696969;
+
+            text-align: justify;
+            background-color: transparent;
+            border: 0px;
+        }
+
+        .field-input-joia {
+            font-size: 12px;
+            color: #696969;
+            background-color: #FFB6C1;
+            border: 1px solid #696969;
+            padding: 10px;
+            width: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        function previewImage() {
+            var preview = document.getElementById('preview');
+            var file = document.getElementById('fileInput').files[0];
+            var reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                preview.src = reader.result;
+                preview.style.width = '100%';
+                preview.style.height = '100%';
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        };
+    </script>
+
+    <div class="certificate">
+        <div class="title">Certificado de Garantia</div>
+
+        <div class="avatar" onclick="document.getElementById('fileInput').click()">
+            <img id="preview" class="avatar" src="" alt="Avatar">
+        </div>
+        <input type="file" id="fileInput" style="display:none" onchange="previewImage()">
+
+        <input class="field-input-joia" type="date" min="2000-01-01" max="2050-12-31" class="w-100">
+        <br><br>
+        <textarea class="field-input-joia" placeholder="Descrição da Joia"></textarea>
+        <br><br>
+
+        <div class="text">
+            Ola
+            <input style="display:inline;" type="text" class="text-field" placeholder="Cliente">
+            <br><br>
+            Obrigado por escolher nossas semijoias. Estamos agradecidos pelo seu apoio à nossa empresa. Esperamos que
+            você tenha uma ótima experiência com sua nova jóia.
+            <br><br>
+            Este Certificado de Garantia garante que as semijoias adquiridas são feitas com materiais de alta qualidade
+            e são sujeitas a rigoroso controle de qualidade antes de serem vendidas.
+            <br><br>
+            Este Certificado de Garantia é válido por 12 meses a partir da data da compra e cobre quaisquer danos ou
+            falhas de fabricação que possam ocorrer durante o uso normal das semijoias.
+            <br><br>
+            Para usufruir da garantia, basta entrar em contato conosco e fornecer uma cópia deste Certificado de
+            Garantia juntamente com a prova da compra. Faremos todos os esforços para corrigir o problema ou, se
+            necessário, substituir as semijoias por um produto equivalente.
+            <br><br>
+            Esta garantia não cobre danos causados por mau uso, acidentes, desgaste natural ou perda.
+            <br><br>
+            Este Certificado de Garantia é intransferível e não pode ser combinado com outras ofertas ou promoções.
+        </div>
+        <div class="note">
+            Agradecemos a sua compra e esperamos que você aproveite suas semijoias por muito tempo.
+            <br><br>
+            Atenciosamente,
+            <br>
+            [Nome da Empresa]
+        </div>
+    </div>
+</body>
+
+</html>
