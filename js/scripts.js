@@ -3,6 +3,26 @@ document.getElementById("print-button").addEventListener("click", function () {
     window.print();
 });
 
+// Função para gerar um ID aleatório no formato xxx-xxx-xxx-xxx
+function generateID() {
+    // Gerar quatro números aleatórios entre 0 e 999
+    var num1 = Math.floor(Math.random() * 1000);
+    var num2 = Math.floor(Math.random() * 1000);
+    var num3 = Math.floor(Math.random() * 1000);
+    var num4 = Math.floor(Math.random() * 1000);
+
+    // Adicionar zeros à esquerda se necessário
+    num1 = ("000" + num1).slice(-3);
+    num2 = ("000" + num2).slice(-3);
+    num3 = ("000" + num3).slice(-3);
+    num4 = ("000" + num4).slice(-3);
+
+    // Concatenar os números com hífens
+    return num1 + "-" + num2 + "-" + num3 + "-" + num4;
+}
+
+
+
 
 function previewImage() {
     var preview = document.getElementById('preview');
