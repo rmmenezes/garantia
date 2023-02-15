@@ -73,7 +73,7 @@ body {
 }
 
 .text {
-    font-size: 14px;
+    font-size: 15px;
     color: #696969;
     text-align: justify;
     font-family: "Courgette", cursive;
@@ -117,7 +117,7 @@ body {
     background-color: #FFB6C1;
     border: 1px solid #696969;
     padding: 10px;
-    width: 400px;
+    width: 100%;
 }
 
 span {

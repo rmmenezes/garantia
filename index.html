@@ -12,6 +12,8 @@
 
 <body>
 
+
+
     <script src="js/scripts.js"></script>
     <script src="https://kit.fontawesome.com/0efd3425ae.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/uuid@3.4.0/browser/v1.min.js"></script>
@@ -40,25 +42,28 @@
             style=" display:inline; color: #ff3198; font-size: 30px;" class="fa-regular fa-gem"></i>
         <br><br>
 
-
-        <div class="row justify-content-md-center">
-
-
-            <div class="col-2">
-                <div class="avatar" onclick="document.getElementById('fileInput').click()">
-                    <img id="preview" class="avatar" src="">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-sm-2">
+                    <div class="avatar" onclick="document.getElementById('fileInput').click()">
+                        <img id="preview" class="avatar" src="">
+                    </div>
+                    <br>
+                    <input type="file" id="fileInput" style="display:none" onchange="previewImage()">
                 </div>
-                <input type="file" id="fileInput" style="display:none" onchange="previewImage()">
-            </div>
+                <br>
+                <br>
 
-            <div class="col-4 text-left ">
-                <input class="field-input-joia" type="date" min="2023-01-01" max="2060-12-31" style="color: red">
-                <br><br>
-                <textarea class="field-input-joia" placeholder="Descrição da Joia"></textarea>
-                <p class="text" style="display: inline; text-align: center;">Codigo de Controle: </p>
-                <p class="text" style="display: inline; text-align: center;" id="uidCertificado"> </p>
-            </div>
+                <div class="col-sm-4 text-left ">
+                    <input class="field-input-joia" type="date" min="2023-01-01" max="2060-12-31" style="color: red">
+                    <br><br>
+                    <textarea class="field-input-joia" placeholder="Descrição da Joia"></textarea>
+                    <br>
+                    <p class="text" style="display: inline; text-align: center;">Codigo de Controle: </p>
+                    <p class="text" style="display: inline; text-align: center;" id="uidCertificado"> </p>
+                </div>
 
+            </div>
         </div>
 
         <div class="text">
@@ -66,9 +71,8 @@
                 contenteditable></span>
             CPF: <input class="input text-field" style=" display:inline; cursor: pointer;" type="text" id="cpf"
                 onkeyup="applyMask()" onblur="validateCPF()" maxlength="14" placeholder="000-000-000.00">
-            <br><br>
             Obrigado por escolher nossas semijoias. Estamos agradecidos pelo seu apoio à nossa empresa. Esperamos que
-            você tenha uma ótima experiência com sua nova jóia.
+            você tenha uma ótima experiência com sua nova semijoia.
             <br><br>
             Este Certificado de Garantia garante que as semijoias adquiridas são feitas com materiais de alta qualidade
             e são sujeitas a rigoroso controle de qualidade antes de serem vendidas.
@@ -81,7 +85,7 @@
             <br><br>
             Para usufruir da garantia, basta entrar em contato conosco e fornecer uma cópia deste Certificado de
             Garantia juntamente com a joia. A equipe realizara a avaliação da semi-joia e caso seja comprovado o defeito
-            faremos todos os esforços para corrigir o problema em um prazo de no maximo 30 (trinta) dias.
+            faremos todos os esforços para corrigir o problema em um prazo de no máximo 30 (trinta) dias.
             <br><br>
 
 
@@ -92,13 +96,13 @@
 
                     <div class="row">
                         <div class="col-md-1"><i class="fa-solid fa-pump-soap"></i></div>
-                        <div class="col-md-11">Evite o contato com detergentes, cosmeticos e similares.</div>
+                        <div class="col-md-11">Evite o contato com detergentes, cosméticos e similares.</div>
                     </div>
 
 
                     <div class="row">
                         <div class="col-md-1"><i class="fa-solid fa-water"></i></div>
-                        <div class="col-md-11">Evite tomar vanho de mar, entrar em pscinas e/ou rios.</div>
+                        <div class="col-md-11">Evite tomar banho de mar, entrar em piscinas e/ou rios.</div>
                     </div>
 
 
@@ -106,24 +110,20 @@
                         <div class="col-md-1"><i class="fa-solid fa-moon"></i></div>
                         <div class="col-md-11">Lembre de tirar suas semijoias antes de deitar.</div>
                     </div>
-
-
                 </div>
 
                 <div class="col-6">
                     <h5>APÓS O USO DAS SEMIJOIAS:</h5>
 
-
                     <div class="row">
                         <div class="col-md-1"><i class="fa-solid fa-box-open"></i></div>
-                        <div class="col-md-11">Guarde as pessas separadamente evitando atrito.</div>
+                        <div class="col-md-11">Guarde as peças separadamente evitando atrito.</div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-1"><i class="fa-solid fa-spray-can-sparkles"></i></div>
                         <div class="col-md-11">Limpe a semijoia com flanela seca para manter o brilho.</div>
                     </div>
-
                 </div>
 
             </div>
@@ -138,6 +138,13 @@
 
         </div>
     </div>
+
+    <script>
+        document.getElementById("print-button").addEventListener("click", function () {
+            window.print();
+        });
+    </script>
+
 </body>
 
 </html>
