@@ -49,15 +49,15 @@
                         <img id="preview" class="avatar" src="">
                     </div>
                     <br>
-                    <input type="file" id="fileInput" style="display:none" onchange="previewImage()">
+                    <input id="imageID" type="file" id="fileInput" style="display:none" onchange="previewImage()">
                 </div>
                 <br>
                 <br>
 
                 <div class="col-sm-4 text-left ">
-                    <input class="field-input-joia" type="date" min="2023-01-01" max="2060-12-31" style="color: red">
+                    <input id="dataID" class="field-input-joia" type="date" min="2023-01-01" max="2060-12-31" style="color: red">
                     <br><br>
-                    <textarea class="field-input-joia" placeholder="Descrição da Joia"></textarea>
+                    <textarea id="descricaoID" class="field-input-joia" placeholder="Descrição da Joia"></textarea>
                     <br>
                     <p class="text" style="display: inline; text-align: center;">Codigo de Controle: </p>
                     <p class="text" style="display: inline; text-align: center;" id="uidCertificado"> </p>
@@ -69,7 +69,7 @@
         <div class="text">
             Ola <span placeholder="Nome Cliente" class="input text-field" type="input" aria-placeholder="nome"
                 contenteditable></span>
-            CPF: <input class="input text-field" style=" display:inline; cursor: pointer;" type="text" id="cpf"
+            CPF: <input id=class="input text-field" style=" display:inline; cursor: pointer;" type="text" id="cpf"
                 onkeyup="applyMask()" onblur="validateCPF()" maxlength="14" placeholder="000-000-000.00">
             <br><br>
             Obrigado por escolher nossas semijoias. Estamos agradecidos pelo seu apoio à nossa empresa. Esperamos que
@@ -142,6 +142,9 @@
 
     <script>
         document.getElementById("print-button").addEventListener("click", function () {
+            if (document.getElementById('imageID').value === "" || document.getElementById('descricaoID').value === "" || document.getElementById('dataID').value === "" || document.getElementById('cpfID').value === "") {
+                //do something
+            }
             window.print();
         });
     </script>
