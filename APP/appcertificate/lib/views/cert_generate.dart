@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:appcertificate/controller/geral.dart';
 import 'package:appcertificate/models/certficadoModel.dart';
 import 'package:appcertificate/util/constants.dart';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
@@ -23,38 +22,21 @@ class _certGenerateState extends State<certGenerate> {
   var _imageFile;
   CertificadoModel certificado = CertificadoModel(
       uid: "",
-      data: "data",
-      nomeCliente: "nome",
-      codigoJoia: "codigoJoia",
-      descricao: "descricao",
-      vendedor: "vendedor");
+      data: "",
+      cpf: "",
+      nomeCliente: "",
+      codigoJoia: "",
+      descricao: "",
+      vendedor: "",
+      banho: "");
 
   @override
   void initState() {
     super.initState();
     _imageFile = null;
-
-    editpdf();
   }
 
-  void findTextOnPdfDocument(PdfDocument pdfDoc, String searchText) {
-    for (int i = 0; i < pdfDoc.pages.count; i++) {
-      final PdfTextExtractor extractor = PdfTextExtractor(pdfDoc);
-      final String pageText = extractor.extractText();
-      if (pageText.contains(searchText)) {
-        final List<TextLine> textLines = extractor.extractTextLines();
-        for (TextLine line in textLines) {
-          if (line.text.contains(searchText)) {
-            final double x = line.bounds.left;
-            final double y = line.bounds.top;
-            print('Found "$searchText" at ($x, $y) on page ${i + 1}');
-          }
-        }
-      }
-    }
-  }
-
-  Future<void> editpdf() async {
+  Future<void> editpdf(CertificadoModel certificado) async {
     final directory = await getApplicationDocumentsDirectory();
     final path = '${directory.path}/input.pdf';
 
@@ -68,27 +50,27 @@ class _certGenerateState extends State<certGenerate> {
         const Rect.fromLTWH(20.512, 127.00, 75.00, 73.836));
 
     page.graphics.drawString(
-        '238-879-621-524', PdfStandardFont(PdfFontFamily.helvetica, 10),
+        certificado.uid, PdfStandardFont(PdfFontFamily.helvetica, 10),
         bounds: const Rect.fromLTWH(118.797, 131.454, 157.105, 15));
 
     page.graphics.drawString(
-        'Prata', PdfStandardFont(PdfFontFamily.helvetica, 10),
+        certificado.banho, PdfStandardFont(PdfFontFamily.helvetica, 10),
         bounds: const Rect.fromLTWH(143.698, 157.988, 131.062, 15));
 
     page.graphics.drawString(
-        '22/02/2023', PdfStandardFont(PdfFontFamily.helvetica, 10),
+        certificado.data, PdfStandardFont(PdfFontFamily.helvetica, 10),
         bounds: const Rect.fromLTWH(156.049, 184.072, 119.437, 15));
 
     page.graphics.drawString(
-        'Rafael Menezes Barboza', PdfStandardFont(PdfFontFamily.helvetica, 10),
+        certificado.nomeCliente, PdfStandardFont(PdfFontFamily.helvetica, 10),
         bounds: const Rect.fromLTWH(62.794, 208, 214.647, 20));
 
     page.graphics.drawString(
-        '452.117.598-85', PdfStandardFont(PdfFontFamily.helvetica, 10),
+        certificado.cpf, PdfStandardFont(PdfFontFamily.helvetica, 10),
         bounds: const Rect.fromLTWH(46.709, 231.390, 229.028, 15));
 
     page.graphics.drawString(
-        'O conjunto de joias faz uso de banho tecnologico com pedras e banho de ouro na codificação exeistente entre o amor e a vida na direão correspondente a cada um estado da arte.',
+        certificado.descricao,
         PdfStandardFont(
           PdfFontFamily.helvetica,
           10,
@@ -197,8 +179,53 @@ class _certGenerateState extends State<certGenerate> {
                         const BorderRadius.all(Radius.circular(100.0)),
                   ),
                 ),
-
                 SizedBox(height: size.height * 0.03),
+                
+                // Codigo da Joia
+                TextFormField(
+                  autofocus: false,
+                  style: kTextFormFieldStyle(),
+                  decoration: const InputDecoration(
+                    labelText: "Codigo da Joia",
+                    labelStyle: TextStyle(color: Colors.black),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, digite seu email.';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    certificado.uid = value!;
+                  },
+                ),
+                SizedBox(height: size.height * 0.02),
+
+                // Banho
+                TextFormField(
+                  autofocus: false,
+                  style: kTextFormFieldStyle(),
+                  decoration: const InputDecoration(
+                    labelText: "Banho",
+                    labelStyle: TextStyle(color: Colors.black),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, digite seu email.';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    certificado.banho = value!;
+                  },
+                ),
+                SizedBox(height: size.height * 0.02),
 
                 // Garantía ate:
                 TextFormField(
@@ -246,12 +273,14 @@ class _certGenerateState extends State<certGenerate> {
                 ),
                 SizedBox(height: size.height * 0.02),
 
-                // Codigo da Joia
+              
+
+                 // CPF
                 TextFormField(
                   autofocus: false,
                   style: kTextFormFieldStyle(),
                   decoration: const InputDecoration(
-                    labelText: "Codigo da Joia",
+                    labelText: "CPF",
                     labelStyle: TextStyle(color: Colors.black),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -264,7 +293,7 @@ class _certGenerateState extends State<certGenerate> {
                     return null;
                   },
                   onSaved: (value) {
-                    certificado.codigoJoia = value!;
+                    certificado.cpf = value!;
                   },
                 ),
                 SizedBox(height: size.height * 0.02),
@@ -295,7 +324,7 @@ class _certGenerateState extends State<certGenerate> {
                 SizedBox(height: size.height * 0.03),
 
                 //Botão Registrar
-                FButton('Reistrar Certificado',
+                FButton('Registrar Certificado',
                     const Color.fromARGB(255, 197, 3, 3), () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState?.save();
@@ -307,11 +336,12 @@ class _certGenerateState extends State<certGenerate> {
                       title: 'Certificado Registrado',
                       desc: 'Versão em PDF disponivel',
                       btnOkOnPress: () {
+                        editpdf(certificado);
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    CertView(certificado: certificado)));
+                                    CertView()));
                       },
                     ).show();
                   } else {

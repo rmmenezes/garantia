@@ -1,16 +1,15 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
-import 'package:appcertificate/models/certficadoModel.dart';
-import 'package:appcertificate/util/constants.dart';
-import 'package:appcertificate/views/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
+import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
 
+import '../util/constants.dart';
+
 class CertView extends StatefulWidget {
-  final CertificadoModel certificado;
-  const CertView({super.key, required this.certificado});
+  const CertView({super.key});
 
   @override
   State<CertView> createState() => _CertViewState();
@@ -26,6 +25,11 @@ class _CertViewState extends State<CertView> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text('MyApp'),
+        ),
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
         body: LayoutBuilder(
@@ -40,8 +44,6 @@ class _CertViewState extends State<CertView> {
       ),
     );
   }
-
-  final _formKey = GlobalKey<FormState>();
 
   /// For large screens
   Widget _buildLargeScreen(
@@ -88,72 +90,29 @@ class _CertViewState extends State<CertView> {
           SizedBox(height: size.height * 0.03),
           Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20),
-              child: Text('Registro de Certificado de Garantia',
+              child: Text('Certificado de Garantia',
                   style: kLoginSubtitleStyle(size))),
           SizedBox(height: size.height * 0.03),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20),
-            child: Form(
-              key: _formKey,
-              child: Column(children: [
-                Text("Ola ${widget.certificado.nomeCliente}"),
-                SizedBox(height: size.height * 0.03),
-
-                const Text(
-                    "Obrigado por escolher nossas semijoias. Estamos agradecidos pelo seu apoio à nossa empresa. Esperamos que você tenha uma ótima experiência com sua nova semijoia."),
-
-                SizedBox(height: size.height * 0.03),
-                const Text(
-                    "Este Certificado de Garantia garante que as semijoias adquiridas são feitas com materiais de alta qualidade e são sujeitas a rigoroso controle de qualidade antes de serem vendidas."),
-
-                SizedBox(height: size.height * 0.03),
-                const Text(
-                    "Este Certificado de Garantia é válido por 06 meses a partir da data da compra e cobre danos ou defeitos de fabricação, perda do banho, ruptura de fechos e outros que possam ocorrer durante o uso normal das semijoias. Não sendo consideradas a garantia em caso de estiverem danificadas por sujeira, mal uso, quebradas, incompletas, arranhadas, amassadas ou avariadas."),
-
-                SizedBox(height: size.height * 0.03),
-                const Text(
-                    "Para usufruir da garantia, basta entrar em contato conosco e fornecer uma cópia deste Certificado de Garantia juntamente com a joia. A equipe realizara a avaliação da semi-joia e caso seja comprovado o defeito faremos todos os esforços para corrigir o problema em um prazo de no máximo 30 (trinta) dias."),
-                SizedBox(height: size.height * 0.03),
-
-                //Botão Registrar
-                FButton('Compartilhar', Color.fromARGB(255, 36, 166, 0), () {}),
-              ]),
+          Expanded(
+            child: SizedBox(
+              height: 200,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(60, 0, 60, 30),
+                child: Center(
+                  child: PdfPreview(
+                    build: (format) => generatePdf("dd"),
+                  ),
+                ),
+              ),
             ),
           ),
-          SizedBox(height: size.height * 0.03),
-          FButton("Print", Colors.black, printDoc)
         ]);
   }
 
-  Future<void> printDoc() async {
-    final doc = pw.Document();
+  Future<Uint8List> generatePdf(String title) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final path = '${directory.path}/output.pdf';
 
-    doc.addPage(pw.Page(
-        pageFormat: PdfPageFormat.a4,
-        build: (pw.Context context) {
-          return pw.Column(children: [
-            pw.Padding(
-                padding: const pw.EdgeInsets.only(left: 20.0, right: 20),
-                child: pw.Text('Registro de Certificado de Garantia')),
-            pw.Padding(
-              padding: const pw.EdgeInsets.only(left: 20.0, right: 20),
-              child: pw.Column(children: [
-                pw.Text("Ola ${widget.certificado.nomeCliente}"),
-                pw.Text(
-                    "Obrigado por escolher nossas semijoias. Estamos agradecidos pelo seu apoio à nossa empresa. Esperamos que você tenha uma ótima experiência com sua nova semijoia."),
-                pw.Text(
-                    "Este Certificado de Garantia garante que as semijoias adquiridas são feitas com materiais de alta qualidade e são sujeitas a rigoroso controle de qualidade antes de serem vendidas."),
-                pw.Text(
-                    "Este Certificado de Garantia é válido por 06 meses a partir da data da compra e cobre danos ou defeitos de fabricação, perda do banho, ruptura de fechos e outros que possam ocorrer durante o uso normal das semijoias. Não sendo consideradas a garantia em caso de estiverem danificadas por sujeira, mal uso, quebradas, incompletas, arranhadas, amassadas ou avariadas."),
-                pw.Text(
-                    "Para usufruir da garantia, basta entrar em contato conosco e fornecer uma cópia deste Certificado de Garantia juntamente com a joia. A equipe realizara a avaliação da semi-joia e caso seja comprovado o defeito faremos todos os esforços para corrigir o problema em um prazo de no máximo 30 (trinta) dias."),
-              ]),
-            ),
-          ]);
-
-          // Center
-        })); // Page
-    await Printing.layoutPdf(
-        onLayout: (PdfPageFormat format) async => doc.save());
+    return File(path).readAsBytes();
   }
 }

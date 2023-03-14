@@ -1,7 +1,6 @@
 import 'package:appcertificate/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import '../util/constants.dart';
 import '../controller/simple_ui_controller.dart';
 import 'widgets/buttons.dart';
