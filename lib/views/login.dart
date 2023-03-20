@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../util/constants.dart';
 import '../controller/simple_ui_controller.dart';
 import 'widgets/buttons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);

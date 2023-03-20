@@ -143,228 +143,230 @@ Widget _buildLargeScreen(
 
   /// build screens
   Widget _buildMainBody(Size size, SimpleUIController simpleUIController) {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: size.width > 600
-            ? MainAxisAlignment.start
-            : MainAxisAlignment.start,
-        children: [
-          size.width > 600
-              ? Container()
-              : Image.asset('assets/wallpaper.jpg',
-                  height: size.height * 0.2,
-                  width: size.width,
-                  fit: BoxFit.cover),
-          SizedBox(height: size.height * 0.03),
-          Padding(
+    return SingleChildScrollView(
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: size.width > 600
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.start,
+          children: [
+            size.width > 600
+                ? Container()
+                : Image.asset('assets/wallpaper.jpg',
+                    height: size.height * 0.2,
+                    width: size.width,
+                    fit: BoxFit.cover),
+            SizedBox(height: size.height * 0.03),
+            Padding(
+                padding: const EdgeInsets.only(left: 20.0, right: 20),
+                child: Text('Registro de Certificado de Garantia',
+                    style: kLoginSubtitleStyle(size))),
+            SizedBox(height: size.height * 0.03),
+            Padding(
               padding: const EdgeInsets.only(left: 20.0, right: 20),
-              child: Text('Registro de Certificado de Garantia',
-                  style: kLoginSubtitleStyle(size))),
-          SizedBox(height: size.height * 0.03),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20),
-            child: Form(
-              key: _formKey,
-              child: Column(children: [
-                // Imagem
-                Container(
-                  padding: const EdgeInsets.all(20.0),
-                  width: 170.0,
-                  height: 170.0,
-                  decoration: BoxDecoration(
-                    image: _imageFile != null
-                        ? DecorationImage(
-                            fit: BoxFit.cover,
-                            image: FileImage(File(_imageFile!.path)))
-                        : const DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage('assets/avataJoia.png')),
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(100.0)),
+              child: Form(
+                key: _formKey,
+                child: Column(children: [
+                  // Imagem
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    width: 170.0,
+                    height: 170.0,
+                    decoration: BoxDecoration(
+                      image: _imageFile != null
+                          ? DecorationImage(
+                              fit: BoxFit.cover,
+                              image: FileImage(File(_imageFile!.path)))
+                          : const DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage('assets/avataJoia.png')),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(100.0)),
+                    ),
                   ),
-                ),
-                SizedBox(height: size.height * 0.03),
+                  SizedBox(height: size.height * 0.03),
+                  
+                  // Codigo da Joia
+                  TextFormField(
+                    autofocus: false,
+                    style: kTextFormFieldStyle(),
+                    decoration: const InputDecoration(
+                      labelText: "Codigo da Joia",
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, digite seu email.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      certificado.uid = value!;
+                    },
+                  ),
+                  SizedBox(height: size.height * 0.02),
+    
+                  // Banho
+                  TextFormField(
+                    autofocus: false,
+                    style: kTextFormFieldStyle(),
+                    decoration: const InputDecoration(
+                      labelText: "Banho",
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, digite seu email.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      certificado.banho = value!;
+                    },
+                  ),
+                  SizedBox(height: size.height * 0.02),
+    
+                  // Garantía ate:
+                  TextFormField(
+                    autofocus: false,
+                    style: kTextFormFieldStyle(),
+                    decoration: const InputDecoration(
+                      labelText: "Garantía ate:",
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, digite seu email.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      certificado.data = value!;
+                    },
+                  ),
+                  SizedBox(height: size.height * 0.02),
+    
+                  // Nome do(a) Cliente
+                  TextFormField(
+                    autofocus: false,
+                    style: kTextFormFieldStyle(),
+                    decoration: const InputDecoration(
+                      labelText: "Nome do(a) Cliente",
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, digite seu email.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      certificado.nomeCliente = value!;
+                    },
+                  ),
+                  SizedBox(height: size.height * 0.02),
+    
                 
-                // Codigo da Joia
-                TextFormField(
-                  autofocus: false,
-                  style: kTextFormFieldStyle(),
-                  decoration: const InputDecoration(
-                    labelText: "Codigo da Joia",
-                    labelStyle: TextStyle(color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
+    
+                   // CPF
+                  TextFormField(
+                    autofocus: false,
+                    style: kTextFormFieldStyle(),
+                    decoration: const InputDecoration(
+                      labelText: "CPF",
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, digite seu email.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      certificado.cpf = value!;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, digite seu email.';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    certificado.uid = value!;
-                  },
-                ),
-                SizedBox(height: size.height * 0.02),
-
-                // Banho
-                TextFormField(
-                  autofocus: false,
-                  style: kTextFormFieldStyle(),
-                  decoration: const InputDecoration(
-                    labelText: "Banho",
-                    labelStyle: TextStyle(color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                  SizedBox(height: size.height * 0.02),
+    
+                  // Descrição
+                  TextFormField(
+                    minLines: 5, //Normal textInputField will be displayed
+                    maxLines: 7, // when user presses enter it will adapt to it
+                    autofocus: false,
+                    style: kTextFormFieldStyle(),
+                    decoration: const InputDecoration(
+                      labelText: "Descrição",
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                      ),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, digite seu email.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      certificado.descricao = value!;
+                    },
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, digite seu email.';
+                  SizedBox(height: size.height * 0.03),
+    
+                  //Botão Registrar
+                  FButton('Registrar Certificado',
+                      const Color.fromARGB(255, 197, 3, 3), () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState?.save();
+                      AwesomeDialog(
+                        width: size.width * 0.4,
+                        context: context,
+                        dialogType: DialogType.success,
+                        animType: AnimType.topSlide,
+                        title: 'Certificado Registrado',
+                        desc: 'Versão em PDF disponivel',
+                        btnOkOnPress: () {
+                          editpdf(certificado);
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      CertView()));
+                        },
+                      ).show();
+                    } else {
+                      AwesomeDialog(
+                        width: size.width * 0.4,
+                        context: context,
+                        dialogType: DialogType.error,
+                        animType: AnimType.topSlide,
+                        title: 'Erro',
+                        desc: 'Verifique todos os campos',
+                        btnCancelText: "Voltar",
+                        btnCancelOnPress: () {},
+                      ).show();
                     }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    certificado.banho = value!;
-                  },
-                ),
-                SizedBox(height: size.height * 0.02),
-
-                // Garantía ate:
-                TextFormField(
-                  autofocus: false,
-                  style: kTextFormFieldStyle(),
-                  decoration: const InputDecoration(
-                    labelText: "Garantía ate:",
-                    labelStyle: TextStyle(color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, digite seu email.';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    certificado.data = value!;
-                  },
-                ),
-                SizedBox(height: size.height * 0.02),
-
-                // Nome do(a) Cliente
-                TextFormField(
-                  autofocus: false,
-                  style: kTextFormFieldStyle(),
-                  decoration: const InputDecoration(
-                    labelText: "Nome do(a) Cliente",
-                    labelStyle: TextStyle(color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, digite seu email.';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    certificado.nomeCliente = value!;
-                  },
-                ),
-                SizedBox(height: size.height * 0.02),
-
-              
-
-                 // CPF
-                TextFormField(
-                  autofocus: false,
-                  style: kTextFormFieldStyle(),
-                  decoration: const InputDecoration(
-                    labelText: "CPF",
-                    labelStyle: TextStyle(color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, digite seu email.';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    certificado.cpf = value!;
-                  },
-                ),
-                SizedBox(height: size.height * 0.02),
-
-                // Descrição
-                TextFormField(
-                  minLines: 5, //Normal textInputField will be displayed
-                  maxLines: 7, // when user presses enter it will adapt to it
-                  autofocus: false,
-                  style: kTextFormFieldStyle(),
-                  decoration: const InputDecoration(
-                    labelText: "Descrição",
-                    labelStyle: TextStyle(color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, digite seu email.';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    certificado.descricao = value!;
-                  },
-                ),
-                SizedBox(height: size.height * 0.03),
-
-                //Botão Registrar
-                FButton('Registrar Certificado',
-                    const Color.fromARGB(255, 197, 3, 3), () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState?.save();
-                    AwesomeDialog(
-                      width: size.width * 0.4,
-                      context: context,
-                      dialogType: DialogType.success,
-                      animType: AnimType.topSlide,
-                      title: 'Certificado Registrado',
-                      desc: 'Versão em PDF disponivel',
-                      btnOkOnPress: () {
-                        editpdf(certificado);
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    CertView()));
-                      },
-                    ).show();
-                  } else {
-                    AwesomeDialog(
-                      width: size.width * 0.4,
-                      context: context,
-                      dialogType: DialogType.error,
-                      animType: AnimType.topSlide,
-                      title: 'Erro',
-                      desc: 'Verifique todos os campos',
-                      btnCancelText: "Voltar",
-                      btnCancelOnPress: () {},
-                    ).show();
-                  }
-                }),
-              ]),
+                  }),
+                ]),
+              ),
             ),
-          ),
-          SizedBox(height: size.height * 0.03),
-        ]);
+            SizedBox(height: size.height * 0.03),
+          ]),
+    );
   }
 }
