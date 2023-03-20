@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "appcertificate" "\0"
+            VALUE "FileDescription", "garantia" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "appcertificate" "\0"
+            VALUE "InternalName", "garantia" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "appcertificate.exe" "\0"
-            VALUE "ProductName", "appcertificate" "\0"
+            VALUE "OriginalFilename", "garantia.exe" "\0"
+            VALUE "ProductName", "garantia" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

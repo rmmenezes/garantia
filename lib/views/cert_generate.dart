@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'package:appcertificate/controller/simple_ui_controller.dart';
 import 'package:appcertificate/models/certficadoModel.dart';
 import 'package:appcertificate/util/constants.dart';
-import 'package:appcertificate/controller/simple_ui_controller.dart';
 import 'package:appcertificate/views/cert_view.dart';
 import 'package:appcertificate/views/widgets/buttons.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';

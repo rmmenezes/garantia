@@ -1,6 +1,6 @@
 {
-    "name": "appcertificate",
-    "short_name": "appcertificate",
+    "name": "garantia",
+    "short_name": "garantia",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

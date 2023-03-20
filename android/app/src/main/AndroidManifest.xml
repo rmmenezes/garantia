@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.appcertificate">
+    package="com.example.garantia">
    <application
-        android:label="appcertificate"
+        android:label="garantia"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

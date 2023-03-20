@@ -42,10 +42,8 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^20.4.53
   path_provider: ^2.0.13
   flutter_full_pdf_viewer: ^1.0.6
-  firebase_core: ^1.10.0
-  firebase_auth: ^3.3.0
-  cloud_firestore: ^3.1.7
-  firebase_storage: ^10.2.0
+  firebase_core: ^2.8.0
+
 
 
 
