@@ -1,4 +1,3 @@
-
 import 'package:appcertificate/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -166,14 +165,17 @@ class _LoginViewState extends State<LoginView> {
                 SizedBox(height: size.height * 0.02),
 
                 /// Login Button
-                FButton('Login com Email', const Color.fromARGB(255, 9, 85, 1), () {}),
+                FButton('Login com Email', const Color.fromARGB(255, 9, 85, 1),
+                    () {}),
                 SizedBox(height: size.height * 0.02),
                 FButton(
                     'Login com Google', const Color.fromARGB(255, 197, 3, 3),
                     () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Home()),
+                    MaterialPageRoute(
+                      builder: (context) => const Home(),
+                    ),
                   );
                 }),
                 SizedBox(height: size.height * 0.03),

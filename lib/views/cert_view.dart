@@ -64,6 +64,7 @@ class _CertViewState extends State<CertView> {
           top: 10,
           left: 10,
           child: ElevatedButton(
+            style: OutlinedButton.styleFrom(backgroundColor: Colors.transparent, side: const BorderSide(color: Colors.transparent)),
             child: Row(
               children: const [
                 Icon(Icons.arrow_back),
@@ -72,7 +73,7 @@ class _CertViewState extends State<CertView> {
               ],
             ),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             },
           ),
         ),

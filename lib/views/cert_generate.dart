@@ -109,24 +109,43 @@ class _certGenerateState extends State<certGenerate> {
 
   final _formKey = GlobalKey<FormState>();
 
-Widget _buildLargeScreen(
+  /// For large screens
+  Widget _buildLargeScreen(
       Size size, SimpleUIController simpleUIController, ThemeData theme) {
-    return Row(
+    return Stack(
       children: [
-        Expanded(
-          flex: 4,
-          child: RotatedBox(
-              quarterTurns: 3,
-              child: Image.asset('assets/wallpaper.jpg',
-                  height: size.height * 0.3,
-                  width: double.infinity,
-                  fit: BoxFit.cover)),
+        Row(
+          children: [
+            Expanded(
+              flex: 4,
+              child: RotatedBox(
+                  quarterTurns: 3,
+                  child: Image.asset('assets/wallpaper.jpg',
+                      height: size.height * 0.3,
+                      width: double.infinity,
+                      fit: BoxFit.cover)),
+            ),
+            SizedBox(width: size.width * 0.06),
+            Expanded(flex: 5, child: _buildMainBody(size, simpleUIController)),
+          ],
         ),
-        SizedBox(width: size.width * 0.06),
-        Expanded(
-          flex: 5,
-          child: SingleChildScrollView(
-            child: _buildMainBody(size, simpleUIController),
+        Positioned(
+          top: 10,
+          left: 10,
+          child: ElevatedButton(
+            style: OutlinedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                side: const BorderSide(color: Colors.transparent)),
+            child: Row(
+              children: const [
+                Icon(Icons.arrow_back),
+                SizedBox(width: 5),
+                Text("Voltar"),
+              ],
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
       ],
@@ -185,7 +204,7 @@ Widget _buildLargeScreen(
                     ),
                   ),
                   SizedBox(height: size.height * 0.03),
-                  
+
                   // Codigo da Joia
                   TextFormField(
                     autofocus: false,
@@ -208,7 +227,7 @@ Widget _buildLargeScreen(
                     },
                   ),
                   SizedBox(height: size.height * 0.02),
-    
+
                   // Banho
                   TextFormField(
                     autofocus: false,
@@ -231,7 +250,7 @@ Widget _buildLargeScreen(
                     },
                   ),
                   SizedBox(height: size.height * 0.02),
-    
+
                   // Garantía ate:
                   TextFormField(
                     autofocus: false,
@@ -254,7 +273,7 @@ Widget _buildLargeScreen(
                     },
                   ),
                   SizedBox(height: size.height * 0.02),
-    
+
                   // Nome do(a) Cliente
                   TextFormField(
                     autofocus: false,
@@ -277,10 +296,8 @@ Widget _buildLargeScreen(
                     },
                   ),
                   SizedBox(height: size.height * 0.02),
-    
-                
-    
-                   // CPF
+
+                  // CPF
                   TextFormField(
                     autofocus: false,
                     style: kTextFormFieldStyle(),
@@ -302,7 +319,7 @@ Widget _buildLargeScreen(
                     },
                   ),
                   SizedBox(height: size.height * 0.02),
-    
+
                   // Descrição
                   TextFormField(
                     minLines: 5, //Normal textInputField will be displayed
@@ -327,7 +344,7 @@ Widget _buildLargeScreen(
                     },
                   ),
                   SizedBox(height: size.height * 0.03),
-    
+
                   //Botão Registrar
                   FButton('Registrar Certificado',
                       const Color.fromARGB(255, 197, 3, 3), () {
@@ -342,11 +359,12 @@ Widget _buildLargeScreen(
                         desc: 'Versão em PDF disponivel',
                         btnOkOnPress: () {
                           editpdf(certificado);
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      CertView()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CertView(),
+                            ),
+                          );
                         },
                       ).show();
                     } else {

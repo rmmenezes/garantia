@@ -198,18 +198,21 @@ class _HomeState extends State<Home> {
                     },
                   ),
                 )),
+            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: FButton(
                   'Gerar Certificado', const Color.fromARGB(255, 98, 141, 95),
                   () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const certGenerate()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const certGenerate(),
+                  ),
+                );
               }),
             ),
-            SizedBox(height: size.height * 0.03),
+            const SizedBox(height: 20),
           ],
         ),
       ),
