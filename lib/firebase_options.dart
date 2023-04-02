@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBOP8zR3BTUdhYMNsw6BhpNEMTAmtO2dOY',
-    appId: '1:108517738544:android:3ebdbf85533360ee5545f5',
+    appId: '1:108517738544:android:19824fdfef89c34e5545f5',
     messagingSenderId: '108517738544',
     projectId: 'juviapp-c37c1',
     storageBucket: 'juviapp-c37c1.appspot.com',
@@ -63,21 +63,21 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyArfZMzPyHOMwVupvaUQxdZcdgtMhfWQPk',
-    appId: '1:108517738544:ios:cda6a229d24414695545f5',
+    appId: '1:108517738544:ios:764254745b681f5c5545f5',
     messagingSenderId: '108517738544',
     projectId: 'juviapp-c37c1',
     storageBucket: 'juviapp-c37c1.appspot.com',
-    iosClientId: '108517738544-80iuer27inq3gpoe38f5uuu04ue10cr8.apps.googleusercontent.com',
-    iosBundleId: 'com.example.appcertificate',
+    iosClientId: '108517738544-vo65kto3gnqt1een3g31mbdns7iiv02t.apps.googleusercontent.com',
+    iosBundleId: 'com.example.garantia',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyArfZMzPyHOMwVupvaUQxdZcdgtMhfWQPk',
-    appId: '1:108517738544:ios:cda6a229d24414695545f5',
+    appId: '1:108517738544:ios:764254745b681f5c5545f5',
     messagingSenderId: '108517738544',
     projectId: 'juviapp-c37c1',
     storageBucket: 'juviapp-c37c1.appspot.com',
-    iosClientId: '108517738544-80iuer27inq3gpoe38f5uuu04ue10cr8.apps.googleusercontent.com',
-    iosBundleId: 'com.example.appcertificate',
+    iosClientId: '108517738544-vo65kto3gnqt1een3g31mbdns7iiv02t.apps.googleusercontent.com',
+    iosBundleId: 'com.example.garantia',
   );
 }

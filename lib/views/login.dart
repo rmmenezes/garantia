@@ -1,3 +1,4 @@
+import 'package:appcertificate/controller/auth.dart';
 import 'package:appcertificate/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -163,6 +164,27 @@ class _LoginViewState extends State<LoginView> {
                 ),
 
                 SizedBox(height: size.height * 0.02),
+
+                ElevatedButton(
+                  onPressed: () async {
+                    // Chama o método signInWithGoogle()
+                    final User? user = await Authentication().signInWithGoogle(context: context);
+
+                    if (user != null) {
+                      // Login com sucesso, redireciona para a próxima página
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Home()),
+                      );
+                    } else {
+                      // Login falhou, mostra uma mensagem de erro
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Login falhou')),
+                      );
+                    }
+                  },
+                  child: Text('Login com Google'),
+                ),
 
                 /// Login Button
                 FButton('Login com Email', const Color.fromARGB(255, 9, 85, 1),
