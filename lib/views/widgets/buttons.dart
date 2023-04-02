@@ -11,7 +11,7 @@ Widget FButton(String titile, Color color, Function() pressed) {
         backgroundColor: MaterialStateProperty.all(color),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(0),
           ),
         ),
       ),

@@ -1,5 +1,4 @@
-import '../../garantia/lib/models/certficadoModel.dart';
-
+import 'package:appcertificate/models/certficadoModel.dart';
 class FormsController {
   submitFormCertificado(_formKey, uid, nomeCliente, dataGarantia, codigoJoia,
       banho, cpf, descricao, vendedor) {

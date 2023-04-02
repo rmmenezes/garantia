@@ -1,98 +1,28 @@
+import 'package:appcertificate/controller/auth_service.dart';
+import 'package:appcertificate/controller/certs_service.dart';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
-import 'package:appcertificate/models/certficadoModel.dart';
 import 'package:appcertificate/util/constants.dart';
 import 'package:appcertificate/views/cert_generate.dart';
 import 'package:appcertificate/views/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomeState extends State<Home> {
-  List<CertificadoModel> certificados = [
-    CertificadoModel(
-        uid: "1",
-        nomeCliente: "Rafael",
-        cpf: "CPF",
-        data: "22/22/22",
-        codigoJoia: "0963",
-        descricao: "a joia é joia rara",
-        vendedor: "Aline",
-        banho: "ouro"),
-    CertificadoModel(
-        uid: "1",
-        nomeCliente: "Rafael",
-        cpf: "CPF",
-        data: "22/22/22",
-        codigoJoia: "0963",
-        descricao: "a joia é joia rara",
-        vendedor: "Aline",
-        banho: "ouro"),
-    CertificadoModel(
-        uid: "1",
-        nomeCliente: "Rafael",
-        cpf: "CPF",
-        data: "22/22/22",
-        codigoJoia: "0963",
-        descricao: "a joia é joia rara",
-        vendedor: "Aline",
-        banho: "ouro"),
-    CertificadoModel(
-        uid: "1",
-        nomeCliente: "Rafael",
-        cpf: "CPF",
-        data: "22/22/22",
-        codigoJoia: "0963",
-        descricao: "a joia é joia rara",
-        vendedor: "Aline",
-        banho: "ouro"),
-    CertificadoModel(
-        uid: "1",
-        nomeCliente: "Rafael",
-        cpf: "CPF",
-        data: "22/22/22",
-        codigoJoia: "0963",
-        descricao: "a joia é joia rara",
-        vendedor: "Aline",
-        banho: "ouro"),
-    CertificadoModel(
-        uid: "1",
-        nomeCliente: "Rafael",
-        cpf: "CPF",
-        data: "22/22/22",
-        codigoJoia: "0963",
-        descricao: "a joia é joia rara",
-        vendedor: "Aline",
-        banho: "ouro"),
-    CertificadoModel(
-        uid: "1",
-        nomeCliente: "Rafael",
-        cpf: "CPF",
-        data: "22/22/22",
-        codigoJoia: "0963",
-        descricao: "a joia é joia rara",
-        vendedor: "Aline",
-        banho: "ouro"),
-    CertificadoModel(
-        uid: "1",
-        nomeCliente: "Rafael",
-        cpf: "CPF",
-        data: "22/22/22",
-        codigoJoia: "0963",
-        descricao: "a joia é joia rara",
-        vendedor: "Aline",
-        banho: "ouro")
-  ];
-
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var theme = Theme.of(context);
+
+    Provider.of<CertsService>(context).currentUser =
+        Provider.of<AuthService>(context).usuario;
 
     SimpleUIController simpleUIController = Get.put(SimpleUIController());
 
@@ -174,7 +104,7 @@ class _HomeState extends State<Home> {
                   height: size.height * 0.65,
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
-                    itemCount: certificados.length,
+                    itemCount: context.watch<CertsService>().certList.length,
                     itemBuilder: (context, index) {
                       return Card(
                         elevation: 4.0,
@@ -184,13 +114,14 @@ class _HomeState extends State<Home> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("ID: ${certificados[index].nomeCliente}"),
+                              Text(
+                                  "ID: ${context.watch<CertsService>().certList[index].nomeCliente}"),
                               const SizedBox(height: 5),
                               Text(
-                                  "Cliente: ${certificados[index].nomeCliente}"),
+                                  "Cliente: ${context.watch<CertsService>().certList[index].nomeCliente}"),
                               const SizedBox(height: 5),
                               Text(
-                                  "Data de validade: ${certificados[index].data}"),
+                                  "Data de validade: ${context.watch<CertsService>().certList[index].data}"),
                             ],
                           ),
                         ),
