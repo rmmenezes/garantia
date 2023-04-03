@@ -1,9 +1,12 @@
 import 'package:appcertificate/controller/auth_service.dart';
 import 'package:appcertificate/controller/certs_service.dart';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
+import 'package:appcertificate/controller/firestore_service.dart';
+import 'package:appcertificate/models/certficadoModel.dart';
 import 'package:appcertificate/util/constants.dart';
 import 'package:appcertificate/views/cert_generate.dart';
 import 'package:appcertificate/views/widgets/buttons.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -99,42 +102,75 @@ class _HomePageState extends State<HomePage> {
                     style: kLoginTitleStyle(size * 0.5))),
             const SizedBox(height: 10),
             Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20),
-                child: SizedBox(
-                  height: size.height * 0.65,
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: context.watch<CertsService>().certList.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        elevation: 4.0,
-                        color: Colors.grey[100],
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                  "ID: ${context.watch<CertsService>().certList[index].nomeCliente}"),
-                              const SizedBox(height: 5),
-                              Text(
-                                  "Cliente: ${context.watch<CertsService>().certList[index].nomeCliente}"),
-                              const SizedBox(height: 5),
-                              Text(
-                                  "Data de validade: ${context.watch<CertsService>().certList[index].data}"),
-                            ],
+              padding: const EdgeInsets.only(left: 20.0, right: 20),
+              child: SizedBox(
+                height: size.height * 0.65,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('certificados')
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Text('Loading...');
+                    }
+
+                    final certList = snapshot.data!.docs.map((doc) {
+                      final data = doc.data() as Map<String, dynamic>;
+                      return CertificadoModel(
+                          uid: doc.id,
+                          nomeCliente: data['nomeCliente'],
+                          cpf: data['cpfCliente'],
+                          data: data['data'],
+                          codigoJoia: data['codigoJoia'],
+                          vendedor: data['vendedor'],
+                          descricao: data['descricao'],
+                          banho: data['banho']);
+                    }).toList();
+
+                    context.read<CertsService>().certList = certList;
+
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: certList.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          elevation: 4.0,
+                          color: Colors.grey[100],
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("ID: ${certList[index].uid}"),
+                                const SizedBox(height: 5),
+                                Text("Cliente: ${certList[index].nomeCliente}"),
+                                const SizedBox(height: 5),
+                                Text(
+                                    "Data de validade: ${certList[index].data}"),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                )),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ),
             const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: FButton(
                   'Gerar Certificado', const Color.fromARGB(255, 98, 141, 95),
                   () {
+                FirebaseStorage().addCert(
+                    Provider.of<CertsService>(context, listen: false)
+                        .certList[0]);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -143,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                 );
               }),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
           ],
         ),
       ),
