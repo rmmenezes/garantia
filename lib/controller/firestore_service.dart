@@ -32,15 +32,18 @@ class FirebaseStorage extends ChangeNotifier {
 
   void addCert(CertificadoModel certModel) {
     try {
-      FirebaseFirestore.instance.collection('certificados').add({
-        certModel.uid: "",
-        certModel.nomeCliente: "",
-        certModel.cpf: "",
-        certModel.data: "",
-        certModel.descricao: "",
-        certModel.vendedor: "",
-        certModel.banho: "",
-        certModel.codigoJoia: "",
+      FirebaseFirestore.instance
+          .collection('certificados')
+          .doc() // generate a unique ID for the document
+          .set({
+        'uid': certModel.uid,
+        'nomeCliente': certModel.nomeCliente,
+        'cpf': certModel.cpf,
+        'data': certModel.data,
+        'descricao': certModel.descricao,
+        'vendedor': "Amanda",
+        'banho': certModel.banho,
+        'codigoJoia': certModel.codigoJoia,
       });
       notifyListeners();
     } on Exception catch (e) {

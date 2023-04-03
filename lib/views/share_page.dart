@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:appcertificate/controller/pdf_service.dart';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,14 +9,14 @@ import 'package:printing/printing.dart';
 
 import '../util/constants.dart';
 
-class CertView extends StatefulWidget {
-  const CertView({super.key});
+class SharePage extends StatefulWidget {
+  const SharePage({super.key});
 
   @override
-  State<CertView> createState() => _CertViewState();
+  State<SharePage> createState() => _SharePageState();
 }
 
-class _CertViewState extends State<CertView> {
+class _SharePageState extends State<SharePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -116,7 +117,7 @@ class _CertViewState extends State<CertView> {
                 padding: const EdgeInsets.fromLTRB(60, 0, 60, 30),
                 child: Center(
                   child: PdfPreview(
-                    build: (format) => generatePdf("dd"),
+                    build: (format) => PdfService().getPdf(),
                   ),
                 ),
               ),
@@ -125,10 +126,5 @@ class _CertViewState extends State<CertView> {
         ]);
   }
 
-  Future<Uint8List> generatePdf(String title) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final path = '${directory.path}/output.pdf';
-
-    return File(path).readAsBytes();
-  }
+  
 }

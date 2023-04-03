@@ -1,10 +1,8 @@
 import 'package:appcertificate/controller/auth_service.dart';
-import 'package:appcertificate/controller/certs_service.dart';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
-import 'package:appcertificate/controller/firestore_service.dart';
 import 'package:appcertificate/models/certficadoModel.dart';
 import 'package:appcertificate/util/constants.dart';
-import 'package:appcertificate/views/cert_generate.dart';
+import 'package:appcertificate/views/certificate_page.dart';
 import 'package:appcertificate/views/widgets/buttons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +21,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var theme = Theme.of(context);
-
-    Provider.of<CertsService>(context).currentUser =
-        Provider.of<AuthService>(context).usuario;
 
     SimpleUIController simpleUIController = Get.put(SimpleUIController());
 
@@ -120,11 +115,11 @@ class _HomePageState extends State<HomePage> {
                     }
 
                     final certList = snapshot.data!.docs.map((doc) {
-                      final data = doc.data() as Map<String, dynamic>;
+                      final data = doc.data() as Map<dynamic, dynamic>;
                       return CertificadoModel(
-                          uid: doc.id,
+                          uid: data['uid'],
                           nomeCliente: data['nomeCliente'],
-                          cpf: data['cpfCliente'],
+                          cpf: data['cpf'],
                           data: data['data'],
                           codigoJoia: data['codigoJoia'],
                           vendedor: data['vendedor'],
@@ -132,32 +127,48 @@ class _HomePageState extends State<HomePage> {
                           banho: data['banho']);
                     }).toList();
 
-                    context.read<CertsService>().certList = certList;
-
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: certList.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          elevation: 4.0,
-                          color: Colors.grey[100],
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("ID: ${certList[index].uid}"),
-                                const SizedBox(height: 5),
-                                Text("Cliente: ${certList[index].nomeCliente}"),
-                                const SizedBox(height: 5),
-                                Text(
-                                    "Data de validade: ${certList[index].data}"),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
+                    return certList.isNotEmpty
+                        ? ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: certList.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                elevation: 4.0,
+                                color: Colors.grey[100],
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text("ID: ${certList[index].uid}"),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                          "Cliente: ${certList[index].nomeCliente}"),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                          "Data de validade: ${certList[index].data}"),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : Center(
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 20.0, right: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Lista Vazia',
+                                        style: kLoginTitleStyle(size * 0.3)),
+                                    Text('Adicione Certificados',
+                                        style: kLoginSubtitleStyle(size * 0.5)),
+                                  ],
+                                )),
+                          );
                   },
                 ),
               ),
@@ -168,9 +179,6 @@ class _HomePageState extends State<HomePage> {
               child: FButton(
                   'Gerar Certificado', const Color.fromARGB(255, 98, 141, 95),
                   () {
-                FirebaseStorage().addCert(
-                    Provider.of<CertsService>(context, listen: false)
-                        .certList[0]);
                 Navigator.push(
                   context,
                   MaterialPageRoute(

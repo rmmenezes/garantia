@@ -18,7 +18,3 @@ class CertificadoModel {
       required this.vendedor,
       required this.banho});
 }
-
-class ListaDeCertificados {
-  late List<CertificadoModel> list;
-}

@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:appcertificate/controller/firestore_service.dart';
+import 'package:appcertificate/controller/pdf_service.dart';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
 import 'package:appcertificate/models/certficadoModel.dart';
 import 'package:appcertificate/util/constants.dart';
-import 'package:appcertificate/views/cert_view.dart';
+import 'package:appcertificate/views/share_page.dart';
 import 'package:appcertificate/views/widgets/buttons.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
@@ -34,53 +36,6 @@ class _certGenerateState extends State<certGenerate> {
   void initState() {
     super.initState();
     _imageFile = null;
-  }
-
-  Future<void> editpdf(CertificadoModel certificado) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final path = '${directory.path}/input.pdf';
-
-    final PdfDocument document =
-        PdfDocument(inputBytes: File(path).readAsBytesSync());
-
-    PdfPage page = document.pages[0];
-
-    page.graphics.drawImage(
-        PdfBitmap(File('assets/avataJoia.png').readAsBytesSync()),
-        const Rect.fromLTWH(20.512, 127.00, 75.00, 73.836));
-
-    page.graphics.drawString(
-        certificado.uid, PdfStandardFont(PdfFontFamily.helvetica, 10),
-        bounds: const Rect.fromLTWH(118.797, 131.454, 157.105, 15));
-
-    page.graphics.drawString(
-        certificado.banho, PdfStandardFont(PdfFontFamily.helvetica, 10),
-        bounds: const Rect.fromLTWH(143.698, 157.988, 131.062, 15));
-
-    page.graphics.drawString(
-        certificado.data, PdfStandardFont(PdfFontFamily.helvetica, 10),
-        bounds: const Rect.fromLTWH(156.049, 184.072, 119.437, 15));
-
-    page.graphics.drawString(
-        certificado.nomeCliente, PdfStandardFont(PdfFontFamily.helvetica, 10),
-        bounds: const Rect.fromLTWH(62.794, 208, 214.647, 20));
-
-    page.graphics.drawString(
-        certificado.cpf, PdfStandardFont(PdfFontFamily.helvetica, 10),
-        bounds: const Rect.fromLTWH(46.709, 231.390, 229.028, 15));
-
-    page.graphics.drawString(
-        certificado.descricao,
-        PdfStandardFont(
-          PdfFontFamily.helvetica,
-          10,
-        ),
-        bounds: const Rect.fromLTWH(23.340, 253.778, 251.981, 60.560),
-        format: PdfStringFormat(alignment: PdfTextAlignment.justify));
-
-    final outputPath = '${directory.path}/output.pdf';
-    File(outputPath).writeAsBytes(await document.save());
-    document.dispose();
   }
 
   @override
@@ -213,7 +168,7 @@ class _certGenerateState extends State<certGenerate> {
                       labelText: "Codigo da Joia",
                       labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderRadius: BorderRadius.all(Radius.circular(0)),
                       ),
                     ),
                     validator: (value) {
@@ -236,7 +191,7 @@ class _certGenerateState extends State<certGenerate> {
                       labelText: "Banho",
                       labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderRadius: BorderRadius.all(Radius.circular(0)),
                       ),
                     ),
                     validator: (value) {
@@ -259,7 +214,7 @@ class _certGenerateState extends State<certGenerate> {
                       labelText: "Garantía ate:",
                       labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderRadius: BorderRadius.all(Radius.circular(0)),
                       ),
                     ),
                     validator: (value) {
@@ -282,7 +237,7 @@ class _certGenerateState extends State<certGenerate> {
                       labelText: "Nome do(a) Cliente",
                       labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderRadius: BorderRadius.all(Radius.circular(0)),
                       ),
                     ),
                     validator: (value) {
@@ -305,7 +260,7 @@ class _certGenerateState extends State<certGenerate> {
                       labelText: "CPF",
                       labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderRadius: BorderRadius.all(Radius.circular(0)),
                       ),
                     ),
                     validator: (value) {
@@ -330,7 +285,7 @@ class _certGenerateState extends State<certGenerate> {
                       labelText: "Descrição",
                       labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderRadius: BorderRadius.all(Radius.circular(0)),
                       ),
                     ),
                     validator: (value) {
@@ -350,6 +305,7 @@ class _certGenerateState extends State<certGenerate> {
                       const Color.fromARGB(255, 197, 3, 3), () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState?.save();
+                      FirebaseStorage().addCert(certificado);
                       AwesomeDialog(
                         width: size.width * 0.4,
                         context: context,
@@ -358,11 +314,11 @@ class _certGenerateState extends State<certGenerate> {
                         title: 'Certificado Registrado',
                         desc: 'Versão em PDF disponivel',
                         btnOkOnPress: () {
-                          editpdf(certificado);
+                          PdfService().editpdf(certificado);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const CertView(),
+                              builder: (context) => const SharePage(),
                             ),
                           );
                         },

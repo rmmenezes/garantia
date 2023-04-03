@@ -1,5 +1,4 @@
 import 'package:appcertificate/controller/auth_service.dart';
-import 'package:appcertificate/controller/certs_service.dart';
 import 'package:appcertificate/views/widgets/auth_check.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,7 +13,6 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthService()),
-        ChangeNotifierProvider(create: (context) => CertsService(context)),
       ],
       child: const MyApp(),
     ),
