@@ -314,7 +314,7 @@ class _certGenerateState extends State<certGenerate> {
                         title: 'Certificado Registrado',
                         desc: 'Versão em PDF disponivel',
                         btnOkOnPress: () {
-                          PdfService().editpdf(certificado);
+                          PdfService().editAndSavePDF(certificado);
                           Navigator.push(
                             context,
                             MaterialPageRoute(

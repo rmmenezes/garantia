@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                       const SnackBar(content: Text("Erro na Autenticação")));
                 }
               }),
-               SizedBox(height: size.height * 0.03),
+              SizedBox(height: size.height * 0.03),
             ],
           ),
         ),
