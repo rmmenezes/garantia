@@ -8,9 +8,10 @@ import 'package:appcertificate/views/share_page.dart';
 import 'package:appcertificate/views/widgets/buttons.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:uuid/uuid.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 // ignore: camel_case_types
 class certGenerate extends StatefulWidget {
@@ -22,6 +23,8 @@ class certGenerate extends StatefulWidget {
 
 class _certGenerateState extends State<certGenerate> {
   var _imageFile;
+  var uuid = Uuid().v1();
+
   CertificadoModel certificado = CertificadoModel(
       uid: "",
       data: "",
@@ -160,12 +163,14 @@ class _certGenerateState extends State<certGenerate> {
                   ),
                   SizedBox(height: size.height * 0.03),
 
-                  // Codigo da Joia
+                  // Nome do(a) Cliente
                   TextFormField(
+                    enabled: false,
+                    initialValue: uuid,
                     autofocus: false,
                     style: kTextFormFieldStyle(),
                     decoration: const InputDecoration(
-                      labelText: "Codigo da Joia",
+                      labelText: "Identifiador do Certifiado:",
                       labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(0)),
@@ -173,58 +178,12 @@ class _certGenerateState extends State<certGenerate> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Por favor, digite seu email.';
+                        return 'Por favor, digite insira este campo.';
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      certificado.uid = value!;
-                    },
-                  ),
-                  SizedBox(height: size.height * 0.02),
-
-                  // Banho
-                  TextFormField(
-                    autofocus: false,
-                    style: kTextFormFieldStyle(),
-                    decoration: const InputDecoration(
-                      labelText: "Banho",
-                      labelStyle: TextStyle(color: Colors.black),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, digite seu email.';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      certificado.banho = value!;
-                    },
-                  ),
-                  SizedBox(height: size.height * 0.02),
-
-                  // Garantía ate:
-                  TextFormField(
-                    autofocus: false,
-                    style: kTextFormFieldStyle(),
-                    decoration: const InputDecoration(
-                      labelText: "Garantía ate:",
-                      labelStyle: TextStyle(color: Colors.black),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, digite seu email.';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      certificado.data = value!;
+                      certificado.uid = uuid;
                     },
                   ),
                   SizedBox(height: size.height * 0.02),
@@ -234,7 +193,7 @@ class _certGenerateState extends State<certGenerate> {
                     autofocus: false,
                     style: kTextFormFieldStyle(),
                     decoration: const InputDecoration(
-                      labelText: "Nome do(a) Cliente",
+                      labelText: "Nome do(a) Cliente:",
                       labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(0)),
@@ -242,7 +201,7 @@ class _certGenerateState extends State<certGenerate> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Por favor, digite seu email.';
+                        return 'Por favor, digite insira este campo.';
                       }
                       return null;
                     },
@@ -257,7 +216,7 @@ class _certGenerateState extends State<certGenerate> {
                     autofocus: false,
                     style: kTextFormFieldStyle(),
                     decoration: const InputDecoration(
-                      labelText: "CPF",
+                      labelText: "CPF:",
                       labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(0)),
@@ -265,12 +224,87 @@ class _certGenerateState extends State<certGenerate> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Por favor, digite seu email.';
+                        return 'Por favor, digite insira este campo.';
                       }
                       return null;
                     },
                     onSaved: (value) {
                       certificado.cpf = value!;
+                    },
+                  ),
+                  SizedBox(height: size.height * 0.02),
+
+                  // Banho
+                  TextFormField(
+                    autofocus: false,
+                    style: kTextFormFieldStyle(),
+                    decoration: const InputDecoration(
+                      labelText: "Banho:",
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, digite insira este campo.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      certificado.banho = value!;
+                    },
+                  ),
+                  SizedBox(height: size.height * 0.02),
+
+                  // Garantía ate:
+                  TextFormField(
+                    autofocus: false,
+                    style: kTextFormFieldStyle(),
+                    decoration: const InputDecoration(
+                      labelText: "Garantia até:",
+                      labelStyle: TextStyle(color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)),
+                      ),
+                    ),
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(8),
+                      MaskTextInputFormatter(
+                          mask: '##/##/##', filter: {"#": RegExp(r'[0-9]')}),
+                    ],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, digite insira este campo.';
+                      }
+                      if (value.length != 8) {
+                        return 'A data deve ter 8 caracteres (dd/mm/aa).';
+                      }
+                      final day = int.tryParse(value.substring(0, 2));
+                      final month = int.tryParse(value.substring(3, 5));
+                      final year = int.tryParse(value.substring(6, 8));
+                      if (day == null || month == null || year == null) {
+                        return 'A data deve estar no formato dd/mm/aa.';
+                      }
+                      if (day < 1 || day > 31) {
+                        return 'O dia deve estar entre 01 e 31.';
+                      }
+                      if (month < 1 || month > 12) {
+                        return 'O mês deve estar entre 01 e 12.';
+                      }
+                      if (year < 0 || year > 99) {
+                        return 'O ano deve estar entre 00 e 99.';
+                      }
+                      // Verifica se a data é válida
+                      final now = DateTime.now();
+                      final date = DateTime(year + 2000, month, day);
+                      if (date.isBefore(now)) {
+                        return 'A data deve ser posterior a hoje.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      certificado.data = value!;
                     },
                   ),
                   SizedBox(height: size.height * 0.02),
@@ -282,7 +316,7 @@ class _certGenerateState extends State<certGenerate> {
                     autofocus: false,
                     style: kTextFormFieldStyle(),
                     decoration: const InputDecoration(
-                      labelText: "Descrição",
+                      labelText: "Descrição:",
                       labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(0)),
@@ -290,7 +324,7 @@ class _certGenerateState extends State<certGenerate> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Por favor, digite seu email.';
+                        return 'Por favor, digite insira este campo.';
                       }
                       return null;
                     },
@@ -302,9 +336,10 @@ class _certGenerateState extends State<certGenerate> {
 
                   //Botão Registrar
                   FButton('Registrar Certificado',
-                      const Color.fromARGB(255, 197, 3, 3), () {
+                      const Color.fromARGB(255, 102, 125, 30), () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState?.save();
+
                       FirebaseStorage().addCert(certificado);
                       AwesomeDialog(
                         width: size.width * 0.4,

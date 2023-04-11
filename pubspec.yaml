@@ -36,10 +36,12 @@ dependencies:
   printing: ^5.10.1
   pdf: ^3.9.0
   syncfusion_flutter_pdf: ^21.1.38
-  syncfusion_flutter_pdfviewer: ^21.1.38
   path_provider: ^2.0.13
   flutter_pdfview: ^1.2.7
   universal_html: ^2.2.1
+  mask_text_input_formatter: ^2.4.0
+  flutter_cache_manager: ^3.3.0
+  pdfx: ^2.3.0
 
   
   # -> Firebase
@@ -77,6 +79,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/templates/
+    - assets/templates/certificado_output.pdf
     
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

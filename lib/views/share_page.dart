@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
+import 'package:pdfx/pdfx.dart';
 
 import '../util/constants.dart';
 
@@ -65,7 +66,9 @@ class _SharePageState extends State<SharePage> {
           top: 10,
           left: 10,
           child: ElevatedButton(
-            style: OutlinedButton.styleFrom(backgroundColor: Colors.transparent, side: const BorderSide(color: Colors.transparent)),
+            style: OutlinedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                side: const BorderSide(color: Colors.transparent)),
             child: Row(
               children: const [
                 Icon(Icons.arrow_back),
@@ -125,6 +128,4 @@ class _SharePageState extends State<SharePage> {
           ),
         ]);
   }
-
-  
 }

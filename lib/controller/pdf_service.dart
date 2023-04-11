@@ -1,33 +1,48 @@
-import 'dart:typed_data';
 import 'package:appcertificate/models/certficadoModel.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:universal_html/html.dart' as html;
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'dart:async';
+import 'dart:html';
 
 class PdfService {
   Future<Uint8List> getPdf() async {
-    ByteData data = await rootBundle.load('templates/certificado_output.pdf');
-    return data.buffer.asUint8List();
+    String filePath = 'assets/templates/certificado.pdf';
+    Completer<Uint8List> completer = Completer<Uint8List>();
+
+    HttpRequest request = HttpRequest();
+    request.open('GET', filePath);
+    request.responseType = 'arraybuffer';
+    request.onLoad.listen((event) {
+      Uint8List pdfBytes = Uint8List.view(request.response);
+      completer.complete(pdfBytes);
+    });
+    request.send();
+
+    return completer.future;
   }
 
   Future<String> editAndSavePDF(CertificadoModel certificado) async {
     // Carrega o arquivo de modelo do certificado
-    final bytes = await rootBundle.load('templates/certificado.pdf');
-    final inputBytes = bytes.buffer.asUint8List();
+    final Future<Uint8List> document = getPdf();
+
+    // Espera pelo resultado de getPdf()
+    final inputBytes = await document;
 
     // Carrega o documento PDF do modelo
-    final PdfDocument document = PdfDocument(inputBytes: inputBytes);
+    final PdfDocument pdfDocument = PdfDocument(inputBytes: inputBytes);
 
     // Edita o documento PDF com os dados do certificado
-    final fiel = await editPdfWithCertificado(document, certificado);
+    final fiel = await editPdfWithCertificado(pdfDocument, certificado);
 
     final blob = html.Blob([fiel], 'application/pdf');
 
     // Cria uma referência para o Firebase Storage
     final storage = FirebaseStorage.instance;
     final reference =
-        storage.ref().child('certificados/certificado_output.pdf');
+        storage.ref().child("certificados/${certificado.uid}.pdf");
 
     // Faz o upload do Blob para o Firebase Storage
     final uploadTask = reference.putBlob(blob);
