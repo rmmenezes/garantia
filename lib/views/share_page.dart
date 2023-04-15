@@ -1,17 +1,15 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:appcertificate/controller/pdf_service.dart';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
+import 'package:appcertificate/models/certficadoModel.dart';
+import 'package:appcertificate/views/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:printing/printing.dart';
-import 'package:pdfx/pdfx.dart';
 
 import '../util/constants.dart';
 
 class SharePage extends StatefulWidget {
-  const SharePage({super.key});
+  final CertificadoModel certificado;
+  const SharePage({Key? key, required this.certificado}) : super(key: key);
 
   @override
   State<SharePage> createState() => _SharePageState();
@@ -119,10 +117,17 @@ class _SharePageState extends State<SharePage> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(60, 0, 60, 30),
                 child: Center(
-                  child: PdfPreview(
-                    build: (format) => PdfService().getPdf(),
-                  ),
-                ),
+                    child: Column(
+                  children: [
+                    Text("ID:${widget.certificado.uid}"),
+                    Text("Nome:${widget.certificado.nomeCliente}"),
+                    Text("Data:${widget.certificado.data}"),
+                    FButton(
+                        "Download do PDF",
+                        const Color.fromARGB(255, 102, 125, 30),
+                        () => PdfService().downloadPDF(widget.certificado.uid)),
+                  ],
+                )),
               ),
             ),
           ),

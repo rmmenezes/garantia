@@ -2,8 +2,6 @@ import 'package:appcertificate/models/certficadoModel.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
-import 'package:universal_html/html.dart' as html;
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'dart:async';
 import 'dart:html';
 
@@ -24,6 +22,20 @@ class PdfService {
     return completer.future;
   }
 
+  downloadPDF(String uid) async {
+    // Obter uma referência para o arquivo PDF no Firebase Storage
+    Reference ref =
+        FirebaseStorage.instance.ref().child('certificados/$uid.pdf');
+
+    // Obter a URL de download do arquivo PDF
+    final url = await ref.getDownloadURL();
+
+    // Crie um link de download para o arquivo PDF
+    final anchor = AnchorElement(href: url);
+    anchor.download = 'certificado-$uid.pdf';
+    anchor.click();
+  }
+
   Future<String> editAndSavePDF(CertificadoModel certificado) async {
     // Carrega o arquivo de modelo do certificado
     final Future<Uint8List> document = getPdf();
@@ -37,7 +49,7 @@ class PdfService {
     // Edita o documento PDF com os dados do certificado
     final fiel = await editPdfWithCertificado(pdfDocument, certificado);
 
-    final blob = html.Blob([fiel], 'application/pdf');
+    final blob = Blob([fiel], 'application/pdf');
 
     // Cria uma referência para o Firebase Storage
     final storage = FirebaseStorage.instance;

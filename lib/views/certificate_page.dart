@@ -353,7 +353,8 @@ class _certGenerateState extends State<certGenerate> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const SharePage(),
+                              builder: (context) =>
+                                  SharePage(certificado: certificado),
                             ),
                           );
                         },
