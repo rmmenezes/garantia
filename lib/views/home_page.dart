@@ -1,13 +1,13 @@
-import 'package:appcertificate/controller/auth_service.dart';
+import 'package:appcertificate/controller/firestore_service.dart';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
 import 'package:appcertificate/models/certficadoModel.dart';
-import 'package:appcertificate/util/constants.dart';
+import 'package:appcertificate/util/utils.dart';
 import 'package:appcertificate/views/certificate_page.dart';
+import 'package:appcertificate/views/share_page.dart';
 import 'package:appcertificate/views/widgets/buttons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -117,6 +117,7 @@ class _HomePageState extends State<HomePage> {
                     final certList = snapshot.data!.docs.map((doc) {
                       final data = doc.data() as Map<dynamic, dynamic>;
                       return CertificadoModel(
+                          img: data['img'],
                           uid: data['uid'],
                           nomeCliente: data['nomeCliente'],
                           cpf: data['cpf'],
@@ -132,23 +133,38 @@ class _HomePageState extends State<HomePage> {
                             scrollDirection: Axis.vertical,
                             itemCount: certList.length,
                             itemBuilder: (context, index) {
-                              return Card(
-                                elevation: 4.0,
-                                color: Colors.grey[100],
-                                child: Container(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text("ID: ${certList[index].uid}"),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                          "Cliente: ${certList[index].nomeCliente}"),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                          "Data de validade: ${certList[index].data}"),
-                                    ],
+                              return InkWell(
+                                onTap: () async {
+                                  print(certList[index].uid);
+                                  CertificadoModel certificado = await Storage()
+                                      .getCertificado(certList[index].uid);
+                         
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          SharePage(certificado: certificado),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  elevation: 4.0,
+                                  color: Colors.grey[100],
+                                  child: Container(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text("ID: ${certList[index].uid}"),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                            "Cliente: ${certList[index].nomeCliente}"),
+                                        const SizedBox(height: 5),
+                                        Text(
+                                            "Data de validade: ${certList[index].data}"),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

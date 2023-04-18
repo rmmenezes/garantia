@@ -1,6 +1,6 @@
 import 'package:appcertificate/controller/auth_service.dart';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
-import 'package:appcertificate/util/constants.dart';
+import 'package:appcertificate/util/utils.dart';
 import 'package:appcertificate/views/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

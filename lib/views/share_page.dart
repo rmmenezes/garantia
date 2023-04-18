@@ -1,11 +1,10 @@
-import 'package:appcertificate/controller/pdf_service.dart';
+import 'package:appcertificate/controller/firestore_service.dart';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
 import 'package:appcertificate/models/certficadoModel.dart';
 import 'package:appcertificate/views/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../util/constants.dart';
+import '../util/utils.dart';
 
 class SharePage extends StatefulWidget {
   final CertificadoModel certificado;
@@ -116,8 +115,7 @@ class _SharePageState extends State<SharePage> {
               height: 200,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(60, 0, 60, 30),
-                child: Center(
-                    child: Column(
+                child: Column(
                   children: [
                     Text("ID:${widget.certificado.uid}"),
                     Text("Nome:${widget.certificado.nomeCliente}"),
@@ -127,7 +125,7 @@ class _SharePageState extends State<SharePage> {
                         const Color.fromARGB(255, 102, 125, 30),
                         () => PdfService().downloadPDF(widget.certificado.uid)),
                   ],
-                )),
+                ),
               ),
             ),
           ),

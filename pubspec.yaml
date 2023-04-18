@@ -36,20 +36,25 @@ dependencies:
   printing: ^5.10.1
   pdf: ^3.9.0
   syncfusion_flutter_pdf: ^21.1.38
-  path_provider: ^2.0.13
   flutter_pdfview: ^1.2.7
   universal_html: ^2.2.1
   mask_text_input_formatter: ^2.4.0
   flutter_cache_manager: ^3.3.0
   pdfx: ^2.3.0
-
-  
+  image_picker: ^0.8.7+3
+  image_picker_web: ^3.0.0+1
+  file_picker: ^5.2.9
+  mime: ^1.0.4
+  image: ^4.0.15
+  date_time_picker: ^2.1.0
+    
   # -> Firebase
   firebase_core: ^2.8.0
   firebase_auth: ^4.4.0
   google_sign_in: ^6.0.2
   cloud_firestore: ^4.5.0
   firebase_storage: ^11.1.0
+  firebase_storage_web: ^3.4.1
 
   provider: ^6.0.5
   cupertino_icons: ^1.0.2

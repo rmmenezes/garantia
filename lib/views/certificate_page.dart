@@ -1,17 +1,21 @@
 import 'dart:io';
+
 import 'package:appcertificate/controller/firestore_service.dart';
-import 'package:appcertificate/controller/pdf_service.dart';
 import 'package:appcertificate/controller/simple_ui_controller.dart';
 import 'package:appcertificate/models/certficadoModel.dart';
-import 'package:appcertificate/util/constants.dart';
+import 'package:appcertificate/util/utils.dart';
 import 'package:appcertificate/views/share_page.dart';
 import 'package:appcertificate/views/widgets/buttons.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:uuid/uuid.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:uuid/uuid.dart';
+import 'package:image_picker_web/image_picker_web.dart';
+import 'dart:html';
+import 'dart:typed_data';
 
 // ignore: camel_case_types
 class certGenerate extends StatefulWidget {
@@ -22,10 +26,34 @@ class certGenerate extends StatefulWidget {
 }
 
 class _certGenerateState extends State<certGenerate> {
-  var _imageFile;
   var uuid = Uuid().v1();
+  final TextEditingController _dateController = TextEditingController();
+
+  Uint8List? _imageData;
+  bool _imageDataBorder = false;
+
+  Future<void> _pickImage() async {
+    final input = FileUploadInputElement();
+    input.accept = 'image/*';
+    input.click();
+
+    input.onChange.listen((event) {
+      final file = input.files!.first;
+      final reader = FileReader();
+
+      reader.onLoad.listen((event) {
+        final buffer = reader.result as Uint8List;
+        setState(() {
+          _imageData = buffer;
+        });
+      });
+
+      reader.readAsArrayBuffer(file);
+    });
+  }
 
   CertificadoModel certificado = CertificadoModel(
+      img: "",
       uid: "",
       data: "",
       cpf: "",
@@ -34,12 +62,6 @@ class _certGenerateState extends State<certGenerate> {
       descricao: "",
       vendedor: "",
       banho: "");
-
-  @override
-  void initState() {
-    super.initState();
-    _imageFile = null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,20 +167,30 @@ class _certGenerateState extends State<certGenerate> {
                 key: _formKey,
                 child: Column(children: [
                   // Imagem
-                  Container(
-                    padding: const EdgeInsets.all(20.0),
-                    width: 170.0,
-                    height: 170.0,
-                    decoration: BoxDecoration(
-                      image: _imageFile != null
-                          ? DecorationImage(
-                              fit: BoxFit.cover,
-                              image: FileImage(File(_imageFile!.path)))
-                          : const DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage('assets/avataJoia.png')),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(100.0)),
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      padding: const EdgeInsets.all(20.0),
+                      width: 170.0,
+                      height: 170.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: _imageDataBorder
+                            ? Border.all(
+                                color: Colors.red,
+                                width: 2.0,
+                                style: BorderStyle.solid)
+                            : null,
+                        image: _imageData != null
+                            ? DecorationImage(
+                                fit: BoxFit.cover,
+                                image: MemoryImage(_imageData!),
+                              )
+                            : const DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage('assets/avataJoia.png'),
+                              ),
+                      ),
                     ),
                   ),
                   SizedBox(height: size.height * 0.03),
@@ -268,38 +300,9 @@ class _certGenerateState extends State<certGenerate> {
                         borderRadius: BorderRadius.all(Radius.circular(0)),
                       ),
                     ),
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(8),
-                      MaskTextInputFormatter(
-                          mask: '##/##/##', filter: {"#": RegExp(r'[0-9]')}),
-                    ],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, digite insira este campo.';
-                      }
-                      if (value.length != 8) {
-                        return 'A data deve ter 8 caracteres (dd/mm/aa).';
-                      }
-                      final day = int.tryParse(value.substring(0, 2));
-                      final month = int.tryParse(value.substring(3, 5));
-                      final year = int.tryParse(value.substring(6, 8));
-                      if (day == null || month == null || year == null) {
-                        return 'A data deve estar no formato dd/mm/aa.';
-                      }
-                      if (day < 1 || day > 31) {
-                        return 'O dia deve estar entre 01 e 31.';
-                      }
-                      if (month < 1 || month > 12) {
-                        return 'O mês deve estar entre 01 e 12.';
-                      }
-                      if (year < 0 || year > 99) {
-                        return 'O ano deve estar entre 00 e 99.';
-                      }
-                      // Verifica se a data é válida
-                      final now = DateTime.now();
-                      final date = DateTime(year + 2000, month, day);
-                      if (date.isBefore(now)) {
-                        return 'A data deve ser posterior a hoje.';
                       }
                       return null;
                     },
@@ -336,40 +339,38 @@ class _certGenerateState extends State<certGenerate> {
 
                   //Botão Registrar
                   FButton('Registrar Certificado',
-                      const Color.fromARGB(255, 102, 125, 30), () {
+                      const Color.fromARGB(255, 4, 109, 27), () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState?.save();
+                      if (_imageData != null) {
+                        await Storage().addCert(certificado, _imageData!);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Certificado Gerado com Sucesso!'),
+                            backgroundColor: Color.fromARGB(255, 4, 109, 27),
+                          ),
+                        );
 
-                      FirebaseStorage().addCert(certificado);
-                      AwesomeDialog(
-                        width: size.width * 0.4,
-                        context: context,
-                        dialogType: DialogType.success,
-                        animType: AnimType.topSlide,
-                        title: 'Certificado Registrado',
-                        desc: 'Versão em PDF disponivel',
-                        btnOkOnPress: () {
-                          PdfService().editAndSavePDF(certificado);
-                          Navigator.push(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  SharePage(certificado: certificado),
-                            ),
-                          );
-                        },
-                      ).show();
+                                builder: (context) =>
+                                    SharePage(certificado: certificado)));
+                      } else {
+                        setState(() {
+                          _imageDataBorder = true;
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content:
+                                    Text('Por favor, selecione uma imagem.'),
+                                backgroundColor: Colors.red));
+                      }
                     } else {
-                      AwesomeDialog(
-                        width: size.width * 0.4,
-                        context: context,
-                        dialogType: DialogType.error,
-                        animType: AnimType.topSlide,
-                        title: 'Erro',
-                        desc: 'Verifique todos os campos',
-                        btnCancelText: "Voltar",
-                        btnCancelOnPress: () {},
-                      ).show();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content:
+                              Text('Por favor, verifique todos os campos.'),
+                          backgroundColor: Colors.red));
                     }
                   }),
                 ]),
