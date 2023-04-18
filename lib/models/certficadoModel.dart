@@ -6,10 +6,9 @@ class CertificadoModel {
   String nomeCliente;
   String cpf;
   String data;
-  String codigoJoia;
   String descricao;
   String vendedor;
-  String banho;
+  String peca;
 
   CertificadoModel(
       {required this.img,
@@ -17,8 +16,7 @@ class CertificadoModel {
       required this.nomeCliente,
       required this.cpf,
       required this.data,
-      required this.codigoJoia,
       required this.descricao,
       required this.vendedor,
-      required this.banho});
+      required this.peca});
 }

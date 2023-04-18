@@ -122,10 +122,9 @@ class _HomePageState extends State<HomePage> {
                           nomeCliente: data['nomeCliente'],
                           cpf: data['cpf'],
                           data: data['data'],
-                          codigoJoia: data['codigoJoia'],
                           vendedor: data['vendedor'],
                           descricao: data['descricao'],
-                          banho: data['banho']);
+                          peca: data['peca']);
                     }).toList();
 
                     return certList.isNotEmpty
@@ -138,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                                   print(certList[index].uid);
                                   CertificadoModel certificado = await Storage()
                                       .getCertificado(certList[index].uid);
-                         
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

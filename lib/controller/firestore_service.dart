@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:appcertificate/models/certficadoModel.dart';
 import 'package:appcertificate/util/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image/image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
@@ -36,8 +37,7 @@ class Storage extends ChangeNotifier {
                   data: doc['data'],
                   descricao: doc['descricao'],
                   vendedor: doc['vendedor'],
-                  banho: doc['banho'],
-                  codigoJoia: doc['codigoJoia'],
+                  peca: doc['peca'],
                 ))
             .toList());
   }
@@ -54,10 +54,9 @@ class Storage extends ChangeNotifier {
         nomeCliente: snapshot['nomeCliente'],
         cpf: snapshot['cpf'],
         data: snapshot['data'],
-        codigoJoia: snapshot['codigoJoia'],
         descricao: snapshot['descricao'],
         vendedor: snapshot['vendedor'],
-        banho: snapshot['banho'],
+        peca: snapshot['peca'],
       );
       return certificado;
     } catch (e) {
@@ -67,10 +66,9 @@ class Storage extends ChangeNotifier {
           nomeCliente: '',
           cpf: '',
           data: '',
-          codigoJoia: '',
           descricao: '',
           vendedor: '',
-          banho: '');
+          peca: '');
     }
   }
 
@@ -93,9 +91,8 @@ class Storage extends ChangeNotifier {
         'cpf': certModel.cpf,
         'data': certModel.data,
         'descricao': certModel.descricao,
-        'vendedor': "Amanda",
-        'banho': certModel.banho,
-        'codigoJoia': certModel.codigoJoia,
+        'vendedor': certModel.vendedor,
+        'peca': certModel.peca,
         'img': downloadUrl,
       });
 
@@ -141,6 +138,8 @@ class PdfService {
 
   Future<Uint8List> generateAndStoragePDF(
       CertificadoModel certificado, Uint8List img) async {
+    final openSansBoldFont = await loadOpenSansBoldFont();
+
     final inputBytes = await getModelo();
     final PdfDocument document = PdfDocument(inputBytes: inputBytes);
     final page = document.pages[0];
@@ -151,33 +150,45 @@ class PdfService {
     );
     page.graphics.drawString(
       certificado.uid,
-      PdfStandardFont(PdfFontFamily.helvetica, 10),
-      bounds: const Rect.fromLTWH(118.797, 131.454, 157.105, 15),
+      openSansBoldFont,
+      brush: PdfSolidBrush(PdfColor(17, 82, 55)),
+      bounds: const Rect.fromLTWH(120.618, 132.404, 163.114, 15),
     );
     page.graphics.drawString(
-      certificado.banho,
-      PdfStandardFont(PdfFontFamily.helvetica, 10),
-      bounds: const Rect.fromLTWH(143.698, 157.988, 131.062, 15),
+      certificado.peca,
+      openSansBoldFont,
+      brush: PdfSolidBrush(PdfColor(17, 82, 55)),
+      bounds: const Rect.fromLTWH(133.947, 158.515, 163.114, 15),
     );
     page.graphics.drawString(
       certificado.data,
-      PdfStandardFont(PdfFontFamily.helvetica, 10),
-      bounds: const Rect.fromLTWH(156.049, 184.072, 119.437, 15),
+      openSansBoldFont,
+      brush: PdfSolidBrush(PdfColor(17, 82, 55)),
+      bounds: const Rect.fromLTWH(158.190, 184.281, 163.114, 15),
     );
     page.graphics.drawString(
       certificado.nomeCliente,
-      PdfStandardFont(PdfFontFamily.helvetica, 10),
-      bounds: const Rect.fromLTWH(46.709, 231.390, 229.028, 15),
+      openSansBoldFont,
+      brush: PdfSolidBrush(PdfColor(17, 82, 55)),
+      bounds: const Rect.fromLTWH(62.063, 208.994, 163.114, 15),
     );
     page.graphics.drawString(
       certificado.cpf,
-      PdfStandardFont(PdfFontFamily.helvetica, 10),
-      bounds: const Rect.fromLTWH(46.709, 231.390, 229.028, 15),
+      openSansBoldFont,
+      brush: PdfSolidBrush(PdfColor(17, 82, 55)),
+      bounds: const Rect.fromLTWH(48.945, 232.403, 163.114, 15),
+    );
+    page.graphics.drawString(
+      certificado.vendedor,
+      openSansBoldFont,
+      brush: PdfSolidBrush(PdfColor(17, 82, 55)),
+      bounds: const Rect.fromLTWH(107.247, 255.963, 163.114, 15),
     );
     page.graphics.drawString(
       certificado.descricao,
-      PdfStandardFont(PdfFontFamily.helvetica, 10),
-      bounds: const Rect.fromLTWH(23.340, 253.778, 251.981, 60.560),
+      openSansBoldFont,
+      brush: PdfSolidBrush(PdfColor(17, 82, 55)),
+      bounds: const Rect.fromLTWH(25.912, 276.328, 163.114, 60.560),
       format: PdfStringFormat(alignment: PdfTextAlignment.justify),
     );
 

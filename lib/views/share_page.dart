@@ -117,9 +117,45 @@ class _SharePageState extends State<SharePage> {
                 padding: const EdgeInsets.fromLTRB(60, 0, 60, 30),
                 child: Column(
                   children: [
-                    Text("ID:${widget.certificado.uid}"),
-                    Text("Nome:${widget.certificado.nomeCliente}"),
-                    Text("Data:${widget.certificado.data}"),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("ID:${widget.certificado.uid}",
+                          style: kLoginTermsAndPrivacyStyle(size)),
+                    ),
+                    SizedBox(height: size.height * 0.01),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Peça: ${widget.certificado.nomeCliente}",
+                            style: kLoginTermsAndPrivacyStyle(size))),
+                    SizedBox(height: size.height * 0.01),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                            "Data de Validade: ${widget.certificado.data}",
+                            style: kLoginTermsAndPrivacyStyle(size))),
+                    SizedBox(height: size.height * 0.01),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                            "Nome Cliente: ${widget.certificado.nomeCliente}",
+                            style: kLoginTermsAndPrivacyStyle(size))),
+                    SizedBox(height: size.height * 0.01),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("CPF: ${widget.certificado.cpf}",
+                            style: kLoginTermsAndPrivacyStyle(size))),
+                    SizedBox(height: size.height * 0.01),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Vendedor: ${widget.certificado.vendedor}",
+                            style: kLoginTermsAndPrivacyStyle(size))),
+                    SizedBox(height: size.height * 0.01),
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                            "Descrição: ${widget.certificado.descricao}",
+                            style: kLoginTermsAndPrivacyStyle(size))),
+                    SizedBox(height: size.height * 0.02),
                     FButton(
                         "Download do PDF",
                         const Color.fromARGB(255, 102, 125, 30),

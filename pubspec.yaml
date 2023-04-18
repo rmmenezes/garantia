@@ -46,7 +46,6 @@ dependencies:
   file_picker: ^5.2.9
   mime: ^1.0.4
   image: ^4.0.15
-  date_time_picker: ^2.1.0
     
   # -> Firebase
   firebase_core: ^2.8.0
@@ -85,7 +84,7 @@ flutter:
   assets:
     - assets/
     - assets/templates/
-    - assets/templates/certificado_output.pdf
+
     
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
