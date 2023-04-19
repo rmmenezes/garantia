@@ -77,8 +77,8 @@ class _HomePageState extends State<HomePage> {
   /// build screens
   Widget _buildMainBody(Size size, SimpleUIController simpleUIController) {
     return SingleChildScrollView(
-      child: Center(
-        child: Column(
+      reverse: true,
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: size.width > 600
               ? MainAxisAlignment.start
@@ -95,9 +95,9 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(left: 20.0, right: 20),
                 child: Text('Certificados Gerados',
                     style: kLoginTitleStyle(size * 0.5))),
-            const SizedBox(height: 10),
+            const SizedBox(height: 5),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20),
+              padding: const EdgeInsets.only(left: 25.0, right: 25),
               child: SizedBox(
                 height: size.height * 0.65,
                 child: StreamBuilder<QuerySnapshot>(
@@ -188,7 +188,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: FButton(
@@ -202,10 +201,10 @@ class _HomePageState extends State<HomePage> {
                 );
               }),
             ),
-            const SizedBox(height: 30),
-          ],
-        ),
-      ),
+            Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom))
+          ]),
     );
   }
 }

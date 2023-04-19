@@ -139,56 +139,58 @@ class PdfService {
   Future<Uint8List> generateAndStoragePDF(
       CertificadoModel certificado, Uint8List img) async {
     final openSansBoldFont = await loadOpenSansBoldFont();
-
+    print("GET");
     final inputBytes = await getModelo();
+    print("GET");
+
     final PdfDocument document = PdfDocument(inputBytes: inputBytes);
     final page = document.pages[0];
 
     page.graphics.drawImage(
       PdfBitmap(img),
-      const Rect.fromLTWH(20.512, 127.00, 75.00, 73.836),
+      const Rect.fromLTWH(22.226, 126.111, 75.133, 73.836),
     );
     page.graphics.drawString(
       certificado.uid,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(120.618, 132.404, 163.114, 15),
+      bounds: const Rect.fromLTWH(120.978, 130.897, 163.114, 15),
     );
     page.graphics.drawString(
       certificado.peca,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(133.947, 158.515, 163.114, 15),
+      bounds: const Rect.fromLTWH(134.224, 156.982, 163.114, 15),
     );
     page.graphics.drawString(
       certificado.data,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(158.190, 184.281, 163.114, 15),
+      bounds: const Rect.fromLTWH(158.982, 182.908, 163.114, 15),
     );
     page.graphics.drawString(
       certificado.nomeCliente,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(62.063, 208.994, 163.114, 15),
+      bounds: const Rect.fromLTWH(62.798, 207.497, 163.114, 15),
     );
     page.graphics.drawString(
       certificado.cpf,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(48.945, 232.403, 163.114, 15),
+      bounds: const Rect.fromLTWH(49.672, 230.719, 163.114, 15),
     );
     page.graphics.drawString(
       certificado.vendedor,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(107.247, 255.963, 163.114, 15),
+      bounds: const Rect.fromLTWH(107.293, 253.924, 163.114, 15),
     );
     page.graphics.drawString(
       certificado.descricao,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(25.912, 276.328, 163.114, 60.560),
+      bounds: const Rect.fromLTWH(25.912, 276.328, 216.260, 60.560),
       format: PdfStringFormat(alignment: PdfTextAlignment.justify),
     );
 
