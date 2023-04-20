@@ -1,18 +1,13 @@
 import 'dart:html';
-import 'dart:html';
 import 'package:appcertificate/models/certficadoModel.dart';
 import 'package:appcertificate/util/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:image/image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'dart:async';
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_storage_web/firebase_storage_web.dart' as fb;
 
 class Storage extends ChangeNotifier {
   List<CertificadoModel> _certsList = [];
@@ -30,7 +25,7 @@ class Storage extends ChangeNotifier {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => CertificadoModel(
-                  img: doc['img'],
+
                   uid: doc['uid'],
                   nomeCliente: doc['nomeCliente'],
                   cpf: doc['cpf'],
@@ -49,7 +44,7 @@ class Storage extends ChangeNotifier {
           .doc(uid)
           .get();
       final certificado = CertificadoModel(
-        img: snapshot['img'],
+
         uid: snapshot.id,
         nomeCliente: snapshot['nomeCliente'],
         cpf: snapshot['cpf'],
@@ -61,7 +56,7 @@ class Storage extends ChangeNotifier {
       return certificado;
     } catch (e) {
       return CertificadoModel(
-          img: '',
+
           uid: '',
           nomeCliente: '',
           cpf: '',
@@ -74,14 +69,6 @@ class Storage extends ChangeNotifier {
 
   addCert(CertificadoModel certModel, Uint8List imageData) async {
     try {
-      print("Armazenando a imagem");
-      final storageRef =
-          FirebaseStorage.instance.ref().child('images/${certModel.uid}.png');
-      final uploadTask = storageRef.putData(convertToPng(imageData));
-      final snapshot = await uploadTask.whenComplete(() {});
-      final downloadUrl = await snapshot.ref.getDownloadURL();
-
-      print("Iniciando Firestore");
       final certRef = FirebaseFirestore.instance
           .collection('certificados')
           .doc(certModel.uid);
@@ -93,10 +80,8 @@ class Storage extends ChangeNotifier {
         'descricao': certModel.descricao,
         'vendedor': certModel.vendedor,
         'peca': certModel.peca,
-        'img': downloadUrl,
       });
 
-      print("Armazenando o PDF");
       final pdfBytes =
           await PdfService().generateAndStoragePDF(certModel, imageData);
       final pdfRef = FirebaseStorage.instance
@@ -190,7 +175,7 @@ class PdfService {
       certificado.descricao,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(25.912, 276.328, 216.260, 60.560),
+      bounds: const Rect.fromLTWH(25.912, 276.328, 163.114, 60.560),
       format: PdfStringFormat(alignment: PdfTextAlignment.justify),
     );
 
@@ -198,5 +183,11 @@ class PdfService {
     document.dispose();
 
     return Uint8List.fromList(bytes);
+  }
+
+  Future<String> getLinkPDF(uid) async {
+    Reference ref =
+        FirebaseStorage.instance.ref().child('certificados/$uid.pdf');
+    return await ref.getDownloadURL();
   }
 }
