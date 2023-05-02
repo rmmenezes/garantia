@@ -10,3 +10,5 @@ rmba@rmba:~/Documentos/GitHub/garantia$ flutter build web
 rmba@rmba:~/Documentos/GitHub/garantia$ firebase deploy
 ✔  Deploy complete!
 Hosting URL: https://juviapp-c37c1.web.app
+
+flutter build web --web-renderer canvaskit --target=lib/main.dart

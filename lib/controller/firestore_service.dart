@@ -1,6 +1,6 @@
 import 'dart:html';
+import 'dart:ui';
 import 'package:appcertificate/models/certficadoModel.dart';
-import 'package:appcertificate/util/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +25,6 @@ class Storage extends ChangeNotifier {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => CertificadoModel(
-
                   uid: doc['uid'],
                   nomeCliente: doc['nomeCliente'],
                   cpf: doc['cpf'],
@@ -44,7 +43,6 @@ class Storage extends ChangeNotifier {
           .doc(uid)
           .get();
       final certificado = CertificadoModel(
-
         uid: snapshot.id,
         nomeCliente: snapshot['nomeCliente'],
         cpf: snapshot['cpf'],
@@ -56,7 +54,6 @@ class Storage extends ChangeNotifier {
       return certificado;
     } catch (e) {
       return CertificadoModel(
-
           uid: '',
           nomeCliente: '',
           cpf: '',
@@ -68,32 +65,12 @@ class Storage extends ChangeNotifier {
   }
 
   addCert(CertificadoModel certModel, Uint8List imageData) async {
-    try {
-      final certRef = FirebaseFirestore.instance
-          .collection('certificados')
-          .doc(certModel.uid);
-      await certRef.set({
-        'uid': certModel.uid,
-        'nomeCliente': certModel.nomeCliente,
-        'cpf': certModel.cpf,
-        'data': certModel.data,
-        'descricao': certModel.descricao,
-        'vendedor': certModel.vendedor,
-        'peca': certModel.peca,
-      });
-
-      final pdfBytes =
-          await PdfService().generateAndStoragePDF(certModel, imageData);
-      final pdfRef = FirebaseStorage.instance
-          .ref()
-          .child('certificados/${certModel.uid}.pdf');
-      await pdfRef.putData(pdfBytes);
-
-      notifyListeners();
-    } catch (e) {
-      print("Erro ao adicionar o certificado: $e");
-      rethrow;
-    }
+    final pdfBytes =
+        await PdfService().generateAndStoragePDF(certModel, imageData);
+    final pdfRef = FirebaseStorage.instance
+        .ref()
+        .child('certificados/${certModel.uid}.pdf');
+    await pdfRef.putData(pdfBytes);
   }
 }
 
@@ -121,6 +98,11 @@ class PdfService {
     anchor.click();
   }
 
+  Future<PdfFont> loadOpenSansBoldFont() async {
+    final fontData = await rootBundle.load("assets/OpenSans-Bold.ttf");
+    return PdfTrueTypeFont(fontData.buffer.asUint8List(), 10);
+  }
+
   Future<Uint8List> generateAndStoragePDF(
       CertificadoModel certificado, Uint8List img) async {
     final openSansBoldFont = await loadOpenSansBoldFont();
@@ -139,43 +121,43 @@ class PdfService {
       certificado.uid,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(120.978, 130.897, 163.114, 15),
+      bounds: const Rect.fromLTWH(120.978, 130.897, 215, 15),
     );
     page.graphics.drawString(
       certificado.peca,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(134.224, 156.982, 163.114, 15),
+      bounds: const Rect.fromLTWH(134.224, 156.982, 144, 15),
     );
     page.graphics.drawString(
       certificado.data,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(158.982, 182.908, 163.114, 15),
+      bounds: const Rect.fromLTWH(158.982, 182.908, 215, 15),
     );
     page.graphics.drawString(
       certificado.nomeCliente,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(62.798, 207.497, 163.114, 15),
+      bounds: const Rect.fromLTWH(62.798, 207.497, 215, 15),
     );
     page.graphics.drawString(
       certificado.cpf,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(49.672, 230.719, 163.114, 15),
+      bounds: const Rect.fromLTWH(49.672, 230.719, 215, 15),
     );
     page.graphics.drawString(
       certificado.vendedor,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(107.293, 253.924, 163.114, 15),
+      bounds: const Rect.fromLTWH(107.293, 253.924, 170, 15),
     );
     page.graphics.drawString(
       certificado.descricao,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(25.912, 276.328, 163.114, 60.560),
+      bounds: const Rect.fromLTWH(25.912, 276.328, 250, 60.560),
       format: PdfStringFormat(alignment: PdfTextAlignment.justify),
     );
 
