@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as img;
 import 'package:http/http.dart' as http;
 
 class Storage extends ChangeNotifier {
@@ -139,7 +140,7 @@ class PdfService {
       certificado.nomeCliente,
       openSansBoldFont,
       brush: PdfSolidBrush(PdfColor(17, 82, 55)),
-      bounds: const Rect.fromLTWH(62.798, 207.497, 215, 15),
+      bounds: const Rect.fromLTWH(62.798, 207.497, 222, 15),
     );
     page.graphics.drawString(
       certificado.cpf,
