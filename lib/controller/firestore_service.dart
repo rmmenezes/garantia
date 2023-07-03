@@ -9,6 +9,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:http/http.dart' as http;
+import 'package:image/image.dart' as imgLib;
 
 class Storage extends ChangeNotifier {
   List<CertificadoModel> _certsList = [];
@@ -99,6 +100,30 @@ class PdfService {
     anchor.click();
   }
 
+  Uint8List transformToSquare(Uint8List img) {
+    // Load the image using the image package
+    imgLib.Image? image = imgLib.decodeImage(img);
+
+    // Calculate the aspect ratio of the image
+    double aspectRatio = image!.width.toDouble() / image.height.toDouble();
+
+    // Determine the dimensions for the square image
+    int size = image.width > image.height ? image.height : image.width;
+
+    // Calculate the crop position
+    int startX = (image.width - size) ~/ 2;
+    int startY = (image.height - size) ~/ 2;
+
+    // Crop the image to the square dimensions
+    imgLib.Image croppedImage =
+        imgLib.copyCrop(image, x: startX, y: startY, height: size, width: size);
+
+    // Reduce the quality of the image to 50%
+    Uint8List croppedImgBytes = imgLib.encodeJpg(croppedImage, quality: 50);
+
+    return croppedImgBytes;
+  }
+
   Future<PdfFont> loadOpenSansBoldFont() async {
     final fontData = await rootBundle.load("assets/OpenSans-Bold.ttf");
     return PdfTrueTypeFont(fontData.buffer.asUint8List(), 10);
@@ -115,7 +140,7 @@ class PdfService {
     final page = document.pages[0];
 
     page.graphics.drawImage(
-      PdfBitmap(img),
+      PdfBitmap(transformToSquare(img)),
       const Rect.fromLTWH(22.226, 126.111, 75.133, 73.836),
     );
     page.graphics.drawString(

@@ -5,8 +5,8 @@ import 'package:appcertificate/views/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:universal_html/html.dart';
-import 'package:image_picker_web/image_picker_web.dart';
+import 'dart:typed_data';
+import 'dart:html' as html;
 import 'package:short_uuids/short_uuids.dart';
 
 // ignore: camel_case_types
@@ -20,28 +20,29 @@ class certGenerate extends StatefulWidget {
 class _certGenerateState extends State<certGenerate> {
   var uuid = const ShortUuid().generate();
   final _formKey = GlobalKey<FormState>();
-  Uint8List? _imageData;
+  Uint8List? _imageData = null;
   bool _imageDataBorder = false;
   bool isLoading = false;
 
   Future<void> _pickImage() async {
-    final input = FileUploadInputElement();
+    final html.FileUploadInputElement input = html.FileUploadInputElement();
     input.accept = 'image/*';
     input.click();
 
-    input.onChange.listen((event) {
-      final file = input.files!.first;
-      final reader = FileReader();
+    await input.onChange.first;
 
-      reader.onLoad.listen((event) {
-        final buffer = reader.result as Uint8List;
-        setState(() {
-          _imageData = buffer;
-        });
-      });
+    final file = input.files!.first;
+    final reader = html.FileReader();
 
-      reader.readAsArrayBuffer(file);
-    });
+    reader.readAsArrayBuffer(file);
+    await reader.onLoad.first;
+
+    final Object? imageData = reader.result;
+    setState(
+      () {
+        _imageData = imageData as Uint8List?;
+      },
+    );
   }
 
   CertificadoModel certificado = CertificadoModel(
@@ -331,50 +332,56 @@ class _certGenerateState extends State<certGenerate> {
                         SizedBox(height: 17),
 
                         //Botão Registrar
-                        FButton('Registrar Certificado',
-                            const Color.fromARGB(255, 4, 109, 27), () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState?.save();
-                            if (_imageData != null) {
-                              setState(() {
-                                isLoading = true;
-                              });
-                              await Storage().addCert(certificado, _imageData!);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content:
-                                      Text('Certificado Gerado com Sucesso!'),
-                                  backgroundColor:
-                                      Color.fromARGB(255, 4, 109, 27),
-                                ),
-                              );
-
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          SharePage(certificado: certificado)));
-                            } else {
-                              setState(() {
-                                _imageDataBorder = true;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
+                        Column(
+                          children: [
+                            FButton('Registrar Certificado',
+                                const Color.fromARGB(255, 4, 109, 27),
+                                () async {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState?.save();
+                                if (_imageData != null) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  await Storage()
+                                      .addCert(certificado, _imageData!);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
                                       content: Text(
-                                          'Por favor, selecione uma imagem.'),
-                                      backgroundColor: Colors.red));
-                            }
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Por favor, verifique todos os campos.'),
-                                    backgroundColor: Colors.red));
-                          }
-                          setState(() {
-                            isLoading = false;
-                          });
-                        }),
+                                          'Certificado Gerado com Sucesso!'),
+                                      backgroundColor:
+                                          Color.fromARGB(255, 4, 109, 27),
+                                    ),
+                                  );
+
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SharePage(
+                                              certificado: certificado)));
+                                } else {
+                                  setState(() {
+                                    _imageDataBorder = true;
+                                  });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Por favor, selecione uma imagem.'),
+                                          backgroundColor: Colors.red));
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Por favor, verifique todos os campos.'),
+                                        backgroundColor: Colors.red));
+                              }
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }),
+                          ],
+                        ),
                         SizedBox(height: 30),
                       ]),
                     ),
